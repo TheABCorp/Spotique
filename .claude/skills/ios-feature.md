@@ -7,6 +7,7 @@ Build a feature for the Spotique iOS app.
 1. Read `iOS/CLAUDE.md` for build commands, architecture, and conventions.
 2. Read `docs/api-contract.md` for the endpoint this feature calls.
 3. Understand the existing code structure in `iOS/Spotique/`.
+4. Read the `brand-style` skill (`.claude/skills/brand-style.md`) for any screen or component work — colors, typography, spacing, and shape must follow it.
 
 ## Architecture
 
