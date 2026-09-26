@@ -27,4 +27,5 @@ Spotique is an hourly private-parking marketplace. It connects residents with un
 
 ## Documentation
 
-- [Product Requirements Document (v1.0 MVP)](https://docs.google.com/document/d/1gxmSRpagE36hLaBn7xeiKXTczLnK5NrYLYKukjU7Q7g/edit?tab=t.0)
+- [Product Requirements Document (v1.0 MVP)](docs/prd-v1.md)
+- [API Contract](docs/api-contract.md)
