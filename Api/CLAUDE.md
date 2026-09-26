@@ -16,13 +16,13 @@ bundle install
 bin/rails server
 
 # Run full test suite
-bundle exec rspec
+bin/rails test
 
-# Run a single spec file
-bundle exec rspec spec/requests/listings_spec.rb
+# Run a single test file
+bin/rails test test/models/user_test.rb
 
-# Run a single example
-bundle exec rspec spec/requests/listings_spec.rb:42
+# Run a single test
+bin/rails test test/models/user_test.rb:10
 
 # Database
 bin/rails db:create db:migrate
@@ -37,7 +37,7 @@ bin/rubocop -a   # auto-correct
 
 - **Rails API-only** — No views, no asset pipeline. JSON responses only.
 - **PostgreSQL** — Primary database.
-- **Firebase Admin SDK** — Verify phone-auth ID tokens on every authenticated request. No session cookies.
+- **JWT authentication** — Stateless bearer tokens signed with HMAC-SHA256. Issued on verification, required on all non-public endpoints.
 - **Solid Queue** — Background jobs (Rails 8 default).
 - **Solid Cache** — Caching (Rails 8 default).
 
@@ -47,11 +47,11 @@ bin/rubocop -a   # auto-correct
 - JSON responses with consistent envelope: `{ "data": ..., "meta": ... }` for collections, `{ "data": ... }` for singles.
 - HTTP status codes: 200 OK, 201 Created, 204 No Content, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 422 Unprocessable Entity.
 - Pagination via `page` and `per_page` query params; include `meta.pagination` in response.
-- Use `before_action` for Firebase token verification on protected routes.
+- Use `before_action` for JWT token verification on protected routes.
 
 ## Conventions
 
-- Write request specs (`spec/requests/`) for every endpoint. Model specs for validations and scopes.
+- Write request tests (`test/integration/`) for every endpoint. Model tests (`test/models/`) for validations and scopes.
 - Use service objects for complex business logic (e.g., booking acceptance flow).
 - Follow Rubocop rules in `.rubocop.yml`.
 - Keep controllers thin — delegate to models and service objects.
