@@ -1,3 +1,9 @@
+---
+name: build
+description: Take a completed tech spec and generate code across all platforms (Rails API, iOS, Android).
+argument-hint: "[path-to-spec]"
+---
+
 # Skill: Build from Tech Spec
 
 Take a completed tech spec and generate code across all platforms. This skill chains the existing platform skills (`rails-api`, `ios-feature`, `android-feature`).

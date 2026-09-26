@@ -1,3 +1,8 @@
+---
+name: ios-feature
+description: Build a feature for the Spotique iOS app using Swift + SwiftUI with MVVM architecture.
+---
+
 # Skill: iOS Feature
 
 Build a feature for the Spotique iOS app.

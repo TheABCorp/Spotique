@@ -1,3 +1,9 @@
+---
+name: tech-spec
+description: Generate a structured tech spec from a PRD feature for the build skill.
+argument-hint: "[prd-feature]"
+---
+
 # Skill: Tech Spec
 
 Generate a structured tech spec from a PRD feature. The spec is written to `docs/specs/<feature-slug>.md` and serves as the input for the `build` skill.
