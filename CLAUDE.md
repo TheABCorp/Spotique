@@ -20,6 +20,12 @@ Key product facts that shape the code:
 - **Android** — Kotlin + Jetpack Compose (TBD).
 - **Api** — Rails 8.1 API-only backend. See [`Api/CLAUDE.md`](Api/CLAUDE.md).
 
+## Frontend & Brand
+
+For any frontend, design, or user-facing UI work, use the `spotique-brand-ui` skill ([`.claude/skills/spotique-brand-ui/SKILL.md`](.claude/skills/spotique-brand-ui/SKILL.md)).
+
+Default to Spotique brand colors and premium hospitality aesthetic unless explicitly told otherwise.
+
 ## Expected backend services
 
 These are the integrations the PRD plans for; they may not all be wired up yet in code:
