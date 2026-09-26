@@ -35,7 +35,7 @@ Run these in parallel using separate agents:
 1. Create model matching the API contract.
 2. Create service calling the endpoint.
 3. Create ViewModel with state management.
-4. Build SwiftUI view.
+4. Build SwiftUI view, following the `spotique-brand-ui` skill for colors/typography/spacing.
 5. Write ViewModel tests.
 
 **Android** (follow `android-feature` skill):
@@ -43,7 +43,7 @@ Run these in parallel using separate agents:
 2. Create Retrofit API interface.
 3. Create repository.
 4. Create ViewModel with StateFlow.
-5. Build Composable.
+5. Build Composable, following the `spotique-brand-ui` skill for colors/typography/spacing.
 6. Write ViewModel tests.
 
 ### Phase 4: Integration Verification
