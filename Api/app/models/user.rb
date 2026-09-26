@@ -1,9 +1,11 @@
 class User < ApplicationRecord
   ROLES = %w[host driver both].freeze
 
+  has_many :addresses, dependent: :destroy, inverse_of: :user
+
   validates :phone, uniqueness: true, allow_nil: true
   validates :phone, format: { with: /\A\+1\d{10}\z/, message: "must be a valid US phone number" }, allow_nil: true
-  validates :email, uniqueness: true, allow_nil: true
+  validates :email, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "must be a valid email address" }, allow_nil: true
   validate :phone_or_email_present
 
@@ -12,7 +14,7 @@ class User < ApplicationRecord
   validates :role, inclusion: { in: ROLES }, allow_nil: true
 
   def profile_complete?
-    first_name.present? && last_name.present? && address.present? && role.present?
+    first_name.present? && last_name.present? && addresses.any? && role.present?
   end
 
   private
