@@ -1,0 +1,21 @@
+# Fixtures use BCrypt digest of "123456"
+active_phone_code:
+  phone: "+13475550000"
+  code_digest: "<%= BCrypt::Password.create('123456') %>"
+  expires_at: "<%= 10.minutes.from_now %>"
+  attempts: 0
+  created_at: "<%= Time.current %>"
+
+expired_code:
+  phone: "+13475550001"
+  code_digest: "<%= BCrypt::Password.create('654321') %>"
+  expires_at: "<%= 5.minutes.ago %>"
+  attempts: 0
+  created_at: "<%= 15.minutes.ago %>"
+
+locked_out_code:
+  phone: "+13475550002"
+  code_digest: "<%= BCrypt::Password.create('111111') %>"
+  expires_at: "<%= 5.minutes.from_now %>"
+  attempts: 5
+  created_at: "<%= Time.current %>"
