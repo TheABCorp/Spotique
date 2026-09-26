@@ -76,18 +76,21 @@ Features are tagged **P0** (required for launch), **P1** (important for v1.0 qua
 
 ### 4.1 Authentication & Onboarding
 
-#### P0 — Phone Number Verification
+#### P0 — User Registration & Verification
 
-- User enters US mobile phone number
-- App sends SMS verification code via Firebase Auth
-- User enters 6-digit code to authenticate
-- New users prompted to enter display name (first name + last initial only)
+- User chooses to sign up with either a US mobile phone number or an email address
+- App sends a 6-digit verification code to the chosen medium (SMS for phone, email for email)
+- User enters the 6-digit code to verify ownership
+- New users complete a profile form: first name, last name, and home address
 - New users select role: "I have a spot to rent" / "I need parking" / "Both"
 
 **Acceptance criteria:**
 
 - Phone verification restricted to US numbers (+1)
+- Email verification accepts any valid email address
+- User must verify via their chosen medium before proceeding
 - Invalid codes show clear error; resend code available after 60 seconds
+- First name, last name, and address are required before accessing the app
 - Unauthenticated users cannot access any app screen beyond auth flow
 - Role selection can be changed later in Settings
 
@@ -258,7 +261,8 @@ Features are tagged **P0** (required for launch), **P1** (important for v1.0 qua
 
 #### P1 — User Profile
 
-- Display name (editable)
+- First name and last name (editable)
+- Home address (editable)
 - Rating summary (positive % + total booking count)
 - No-show count (drivers only)
 - Role toggle (Host / Driver / Both)
@@ -296,13 +300,13 @@ Features are tagged **P0** (required for launch), **P1** (important for v1.0 qua
 
 ### 6.1 Host Onboarding & Listing Flow
 
-1. Download app → Enter phone number → Verify SMS code → Enter display name → Select role (Host) → Create listing CTA
+1. Download app → Enter phone number or email → Verify code → Enter first name, last name, address → Select role (Host) → Create listing CTA
 2. Listing wizard: Address → Spot type → Photos → Hourly rate → Availability schedule → Description (optional) → Payment info → Preview → Publish
 3. Listing live: host sees their pin on the map; inbox tab shows 0 pending requests
 
 ### 6.2 Driver Booking Flow
 
-1. Download app → Phone verification → Display name → Select role (Driver) → Map shown centered on Jackson Heights
+1. Download app → Enter phone number or email → Verify code → Enter first name, last name, address → Select role (Driver) → Map shown centered on Jackson Heights
 2. Set "When" filter (date + start + end time) → Map updates → Browse available pins → Tap pin → Spot detail
 3. Request booking → Confirm details + payment reminder → Submit request (status: Pending)
 4. Await host response → Push notification: Confirmed or Declined
@@ -328,7 +332,7 @@ Features are tagged **P0** (required for launch), **P1** (important for v1.0 qua
 
 ### 7.2 Security & Privacy
 
-- Firebase Authentication with phone number verification required for all access
+- Verified phone number or email address required for all access
 - Firestore Security Rules enforce users can only read/write their own data
 - Full listing address hidden in map view and spot detail; revealed only after booking confirmation
 - Host phone number revealed only to confirmed drivers; driver phone revealed only to host after booking creation
@@ -354,7 +358,7 @@ Features are tagged **P0** (required for launch), **P1** (important for v1.0 qua
 
 | # | Question | Decision needed by |
 |---|----------|-------------------|
-| 1 | Should hosts be required to add a profile photo, or is a display name + phone verification sufficient for trust? | Before design complete |
+| 1 | Should hosts be required to add a profile photo, or is a verified identity (name + phone/email) sufficient for trust? | Before design complete |
 | 2 | What happens if a host never responds to a booking request? Auto-decline after 24 hours? | Before build starts |
 | 3 | Should a driver be able to book the same spot for multiple consecutive days? | Before booking request screen design |
 | 4 | Should we allow a host to have more than one active listing (e.g. both a driveway and a garage)? | Before listing creation build |

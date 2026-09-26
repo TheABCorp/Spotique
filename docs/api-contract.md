@@ -2,7 +2,7 @@
 
 Base URL: `/api/v1`
 
-All authenticated endpoints require header: `Authorization: Bearer <firebase_id_token>`
+All authenticated endpoints require header: `Authorization: Bearer <token>`
 
 Source of truth for product requirements: [`prd-v1.md`](prd-v1.md)
 
@@ -10,36 +10,126 @@ Source of truth for product requirements: [`prd-v1.md`](prd-v1.md)
 
 ## Authentication
 
-### `POST /auth/verify`
+### `POST /auth/send-code`
 
-Verify a Firebase phone-auth ID token and return/create the user profile.
+Send a 6-digit verification code to a phone number or email address. **No authentication required.**
 
 **Request:**
 ```json
 {
-  "id_token": "eyJhbG...",
-  "display_name": "Jane D",
-  "role": "host"
+  "phone": "+13475551234"
 }
 ```
 
-`display_name` and `role` are required only on first verification (new user creation).
+Or:
+
+```json
+{
+  "email": "jane@example.com"
+}
+```
+
+Exactly one of `phone` or `email` is required.
+
+**Validations:**
+- `phone`: Must be a valid US number (+1, 10 digits after country code).
+- `email`: Must be a valid email address.
 
 **Response (200):**
 ```json
 {
   "data": {
-    "id": "uid_abc123",
-    "phone": "+13475551234",
-    "display_name": "Jane D",
-    "role": "host",
-    "rating_positive_pct": null,
-    "rating_count": 0,
-    "no_show_count": 0,
-    "created_at": "2025-01-15T10:00:00Z"
+    "medium": "phone",
+    "masked": "+1347***1234",
+    "expires_in": 600
   }
 }
 ```
+
+**Rate limiting:** Max 3 codes per phone/email per hour. Returns 429 on excess.
+
+### `POST /auth/verify`
+
+Verify the 6-digit code and issue an authentication token. **No authentication required.** This is the bridge between verification (proving identity) and authentication (bearer token for API access). On success, the response includes a `token` that the client must store and send as `Authorization: Bearer <token>` on all subsequent requests. For new users, returns `is_new: true` — the client must call `POST /auth/complete-profile` before the user can access any other endpoint.
+
+**Request:**
+```json
+{
+  "phone": "+13475551234",
+  "code": "482910"
+}
+```
+
+Or:
+
+```json
+{
+  "email": "jane@example.com",
+  "code": "482910"
+}
+```
+
+**Response (200) — existing user:**
+```json
+{
+  "data": {
+    "id": "uid_abc123",
+    "token": "eyJhbG...",
+    "is_new": false,
+    "user": {
+      "id": "uid_abc123",
+      "phone": "+13475551234",
+      "email": null,
+      "first_name": "Jane",
+      "last_name": "Doe",
+      "address": "34-15 74th Street, Jackson Heights, NY 11372",
+      "role": "host",
+      "rating_positive_pct": 94,
+      "rating_count": 17,
+      "no_show_count": 0,
+      "created_at": "2025-01-15T10:00:00Z"
+    }
+  }
+}
+```
+
+**Response (200) — new user:**
+```json
+{
+  "data": {
+    "id": "uid_abc123",
+    "token": "eyJhbG...",
+    "is_new": true,
+    "user": null
+  }
+}
+```
+
+**Error (401):** Invalid or expired code.
+
+### `POST /auth/complete-profile`
+
+Complete registration for a new user. **Requires authentication** — the token from `POST /auth/verify` must be sent as `Authorization: Bearer <token>`. Required after `POST /auth/verify` returns `is_new: true`. All other authenticated endpoints return 403 `"profile_incomplete"` until this is called.
+
+**Request:**
+```json
+{
+  "user": {
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "address": "34-15 74th Street, Jackson Heights, NY 11372",
+    "role": "host"
+  }
+}
+```
+
+**Validations:**
+- `first_name`: Required, 1–50 characters.
+- `last_name`: Required, 1–50 characters.
+- `address`: Required.
+- `role`: Required, one of `host`, `driver`, `both`.
+
+**Response (201):** Returns the full user object (same shape as existing user in `POST /auth/verify`).
 
 ### `PATCH /users/me`
 
@@ -49,12 +139,16 @@ Update current user's profile. Requires authentication.
 ```json
 {
   "user": {
-    "display_name": "Jane D",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "address": "34-15 74th Street, Jackson Heights, NY 11372",
     "role": "both",
     "payment_method_text": "Cash or Venmo @janed"
   }
 }
 ```
+
+All fields are optional — only include fields being updated.
 
 **Response (200):** Returns the updated user object.
 
