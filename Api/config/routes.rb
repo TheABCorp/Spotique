@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :auth do
         post "send-code", to: "send_code#create"
+        post "verify", to: "verify#create"
       end
     end
   end
