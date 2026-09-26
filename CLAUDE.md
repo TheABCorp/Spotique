@@ -39,6 +39,9 @@ Web/       — Web app (TBD)
 
 Each platform directory has its own `CLAUDE.md` with platform-specific build commands, architecture, and conventions. Refer to those when working within a specific platform.
 
-## Further reading
+## Key References
 
-- [Spotique PRD v1.0 (MVP)](https://docs.google.com/document/d/1gxmSRpagE36hLaBn7xeiKXTczLnK5NrYLYKukjU7Q7g/edit?tab=t.0) — source of truth for product scope, personas, and acceptance criteria
+- [`docs/prd-v1.md`](docs/prd-v1.md) — PRD v1.0 (MVP): product scope, personas, acceptance criteria, feature requirements
+- [`docs/api-contract.md`](docs/api-contract.md) — REST API contract: all endpoints, request/response shapes, validations
+- [`.claude/agents.md`](.claude/agents.md) — Multi-agent development workflow guide
+- [`.claude/skills/`](.claude/skills/) — Reusable skills for iOS, Android, Rails, Firebase, and full-stack feature development
