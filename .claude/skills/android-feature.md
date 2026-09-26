@@ -1,3 +1,8 @@
+---
+name: android-feature
+description: Build a feature for the Spotique Android app using Kotlin + Jetpack Compose with MVVM architecture.
+---
+
 # Skill: Android Feature
 
 Build a feature for the Spotique Android app.

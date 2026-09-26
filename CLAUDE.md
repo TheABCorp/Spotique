@@ -10,7 +10,7 @@ Key product facts that shape the code:
 
 - **MVP geography**: Jackson Heights, Queens, NY (zip 11372). Address autocomplete and the map are scoped to this area.
 - **Payments are off-platform**: cash, Venmo, or Zelle, paid on arrival. There is no Stripe/payment integration in MVP.
-- **Phone-number auth** is the only identity. A verified US phone number is required to use any screen.
+- **Verified identity** is required. Users sign up with a US phone number or email address and must verify before accessing any screen.
 - **Privacy model**: the full street address and host phone are hidden until a booking is confirmed. Driver phone is shared with the host at booking creation.
 - **Trust model**: post-booking thumbs-up/down ratings and no-show tracking (no in-app chat).
 
@@ -24,7 +24,7 @@ Key product facts that shape the code:
 
 These are the integrations the PRD plans for; they may not all be wired up yet in code:
 
-- **Firebase Authentication** — phone-number verification (SMS)
+- **Authentication** — phone-number (SMS) and email verification
 - **Cloud Firestore** — listings, bookings, ratings, user profiles; Security Rules enforce per-user access
 - **Google Maps + Google Places** — map view and address autocomplete (restricted to 11372)
 - **Push notifications** — APNs on iOS, FCM on Android; triggers include new booking request, accept/decline, rating-window open

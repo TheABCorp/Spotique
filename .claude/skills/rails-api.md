@@ -1,3 +1,8 @@
+---
+name: rails-api
+description: Build an API endpoint for the Spotique Rails backend.
+---
+
 # Skill: Rails API Endpoint
 
 Build an API endpoint for the Spotique Rails backend.

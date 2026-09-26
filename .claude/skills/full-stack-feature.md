@@ -1,3 +1,8 @@
+---
+name: full-stack-feature
+description: Implement a feature across all platforms - Rails API, iOS, and Android.
+---
+
 # Skill: Full-Stack Feature
 
 Implement a feature across all platforms: Rails API, iOS, and Android.
