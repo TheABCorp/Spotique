@@ -7,6 +7,7 @@ Build a feature for the Spotique Android app.
 1. Read `Android/CLAUDE.md` for build commands, architecture, and conventions.
 2. Read `docs/api-contract.md` for the endpoint this feature calls.
 3. Understand the existing code structure in `Android/`.
+4. Read the `brand-style` skill (`.claude/skills/brand-style.md`) for any screen or component work — colors, typography, spacing, and shape must follow it.
 
 ## Architecture
 
