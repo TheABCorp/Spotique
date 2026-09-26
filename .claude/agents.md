@@ -4,7 +4,7 @@ This repo supports parallel development across iOS, Android, and Web using separ
 
 ## Workflow: API First, Then Clients
 
-1. **API agent** — Implement the Rails endpoint in `Web/`. Follow `Web/CLAUDE.md`. Write request specs.
+1. **API agent** — Implement the Rails endpoint in `Api/`. Follow `Api/CLAUDE.md`. Write request specs.
 2. **iOS agent** — Implement the client feature in `iOS/`. Follow `iOS/CLAUDE.md`. Write ViewModel tests.
 3. **Android agent** — Implement the client feature in `Android/`. Follow `Android/CLAUDE.md`. Write ViewModel tests.
 
@@ -16,7 +16,7 @@ Use Claude Code's Task tool to launch one agent per platform:
 
 ```
 Launch three agents in parallel:
-- Agent 1: "Implement POST /bookings endpoint in Web/ per docs/api-contract.md and Web/CLAUDE.md"
+- Agent 1: "Implement POST /bookings endpoint in Api/ per docs/api-contract.md and Api/CLAUDE.md"
 - Agent 2: "Implement booking request screen in iOS/ calling POST /bookings per docs/api-contract.md and iOS/CLAUDE.md"
 - Agent 3: "Implement booking request screen in Android/ calling POST /bookings per docs/api-contract.md and Android/CLAUDE.md"
 ```
@@ -29,7 +29,7 @@ Launch three agents in parallel:
 | `docs/api-contract.md` | REST endpoint specs — the single source of truth for request/response shapes |
 | `iOS/CLAUDE.md` | iOS build commands, architecture, conventions |
 | `Android/CLAUDE.md` | Android build commands, architecture, conventions |
-| `Web/CLAUDE.md` | Rails build commands, architecture, conventions |
+| `Api/CLAUDE.md` | Rails build commands, architecture, conventions |
 
 ## Rules for Agents
 

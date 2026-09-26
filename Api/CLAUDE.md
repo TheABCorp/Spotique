@@ -1,6 +1,6 @@
-# CLAUDE.md — Web (Rails API)
+# CLAUDE.md — Api (Rails API)
 
-This file provides guidance to Claude Code when working in the Web directory.
+This file provides guidance to Claude Code when working in the Api directory.
 
 ## Project Overview
 

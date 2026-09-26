@@ -20,7 +20,7 @@ Implement a feature across all platforms: Rails API, iOS, and Android.
 
 1. Follow the `rails-api` skill to implement the endpoint.
 2. Write request specs covering happy path, auth, validation, and edge cases.
-3. Verify specs pass: `cd Web && bundle exec rspec`.
+3. Verify specs pass: `cd Api && bundle exec rspec`.
 
 ### Phase 3: iOS + Android (parallel)
 

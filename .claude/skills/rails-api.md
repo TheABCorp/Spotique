@@ -4,9 +4,9 @@ Build an API endpoint for the Spotique Rails backend.
 
 ## Before You Start
 
-1. Read `Web/CLAUDE.md` for build commands, architecture, and conventions.
+1. Read `Api/CLAUDE.md` for build commands, architecture, and conventions.
 2. Read `docs/api-contract.md` for the endpoint specification.
-3. Review existing controllers in `Web/app/controllers/api/v1/`.
+3. Review existing controllers in `Api/app/controllers/api/v1/`.
 
 ## Architecture
 

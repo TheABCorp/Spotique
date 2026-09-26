@@ -23,7 +23,7 @@ Spotique is an hourly private-parking marketplace. It connects residents with un
 
 - **[iOS](iOS/)** — SwiftUI + SwiftData
 - **[Android](Android/)** — Kotlin + Jetpack Compose
-- **[Web](Web/)**
+- **[Api](Api/)** — Rails API backend
 
 ## Documentation
 

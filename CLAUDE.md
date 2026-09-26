@@ -18,7 +18,7 @@ Key product facts that shape the code:
 
 - **iOS** — Swift + SwiftUI (with SwiftData locally). See [`iOS/CLAUDE.md`](iOS/CLAUDE.md).
 - **Android** — Kotlin + Jetpack Compose (TBD).
-- **Web** — TBD.
+- **Api** — Rails 8.1 API-only backend. See [`Api/CLAUDE.md`](Api/CLAUDE.md).
 
 ## Expected backend services
 
@@ -34,7 +34,7 @@ These are the integrations the PRD plans for; they may not all be wired up yet i
 ```
 iOS/       — iOS app (SwiftUI + SwiftData)
 Android/   — Android app (TBD)
-Web/       — Web app (TBD)
+Api/       — Rails API backend
 ```
 
 Each platform directory has its own `CLAUDE.md` with platform-specific build commands, architecture, and conventions. Refer to those when working within a specific platform.
