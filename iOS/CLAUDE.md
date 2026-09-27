@@ -43,6 +43,15 @@ xcodebuild -project Spotique.xcodeproj -scheme Spotique -sdk iphonesimulator -de
 - Follow Swift API Design Guidelines for naming.
 - Keep views thin — no business logic in SwiftUI view bodies.
 
+## Skills
+
+Use these skills (in [`../.claude/skills/`](../.claude/skills/)) for iOS work:
+
+- `spotique-brand-ui` — colors, typography, spacing for any screen or component
+- `liquid-glass-design` — iOS 26 Liquid Glass for navigation, toolbars, and floating map controls
+- `swift-concurrency-6-2` — Swift 6.2 concurrency patterns (`@MainActor`, `@concurrent`, isolated conformances)
+- `swift-actor-persistence` — actor-based file-backed caches (SwiftData remains the default for local persistence)
+
 ## Shared API Contract
 
 See [`../docs/api-contract.md`](../docs/api-contract.md) for the REST endpoints this client calls.
