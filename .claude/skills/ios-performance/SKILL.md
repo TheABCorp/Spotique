@@ -51,6 +51,37 @@ Use when the app feels slow, drops frames, uses too much memory or battery, or b
 - Use stable, cheap identities in `ForEach`; avoid `AnyView`.
 - Avoid heavy `GeometryReader`/`onAppear` work in list rows; consider `drawingGroup()` only after profiling.
 
+## SwiftUI Performance Patterns
+
+- **Cache static view data as properties**, not rebuilt in `body`:
+  ```swift
+  private let gridColumns = [GridItem(.flexible()), GridItem(.flexible())]   // ✅
+  LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2)) { … }  // ❌ allocates every render
+  ```
+- **Precompute display metadata in the ViewModel** with static dictionaries (O(1)) instead of `switch` on strings inside view code; use `lazy var` for expensive one-time derived values.
+- **Compare strings efficiently**: `caseInsensitiveCompare(_:) == .orderedSame` instead of `lowercased() == lowercased()`, which allocates two strings per comparison.
+- **Keep computed properties cheap** (simple boolean logic). Move validation, I/O, or heavy work to methods or cached state.
+- **Pass value types** (`Sendable` structs) to child views; keep `ForEach` closures minimal, extracting complex logic to methods.
+- **Scope animations to a value**: `.animation(.spring(response: 0.3), value: flag)`, never a bare `.animation(.default)`.
+- A brief delay to show success feedback before dismissing (~0.6–0.8 s) is fine; don't add sleeps elsewhere.
+
+### Anti-Patterns
+
+1. Recreating arrays/dictionaries in `body`
+2. String operations during rendering (capitalizing, lowercasing, formatting)
+3. Long `switch` statements on strings in hot paths
+4. Creating heavy closures in `ForEach`
+5. Unbounded animations
+6. Heavy computation in computed properties
+
+### Checklist
+
+- [ ] Static view components cached as properties
+- [ ] String lookups use dictionaries; comparisons use `caseInsensitiveCompare`
+- [ ] Computed properties are lightweight
+- [ ] Animations bound to specific values
+- [ ] No collection recreation in `body`; `ForEach` closures minimal
+
 ## Concurrency
 
 - Move CPU-heavy work (decoding large payloads, clustering, image processing) off the main actor with `@concurrent` (see `swift-concurrency-6-2`); network calls are already async and don't need it.

@@ -17,7 +17,7 @@ Use when adding a feature's ViewModel/service layer, refactoring a view that has
 - **Models** — plain `Codable`/`Sendable` structs matching the API contract; `@Model` classes only for SwiftData-persisted data.
 - **ViewModels** — `@Observable` + `@MainActor` classes. They own screen state, validation, and calls to services. No `import SwiftUI` types beyond what's needed for state (no `View`, `Color`).
 - **Views** — declarative and thin. Read state from the ViewModel, forward user intent as method calls. No business logic in `body`.
-- **Services/repositories** — behind a protocol (`BookingServicing`, `ListingServicing`, …), `Sendable`, `async throws`. One responsibility each (networking, Firestore, persistence).
+- **Services/repositories** — the only layer that touches SwiftData, Firestore, or `URLSession`; ViewModels never talk to them directly. Behind a protocol (`BookingServicing`, `ListingServicing`, …), `Sendable`, `async throws`. One responsibility each (networking, Firestore, persistence).
 - **No Combine.** Use `async/await`; `@Observable` replaces `ObservableObject`/`@Published`. Combine only when wrapping a delegate-based API.
 - **State ownership** — `@State` for a view owning its ViewModel (`@State private var viewModel = …`), `@Bindable` when you need bindings into an injected `@Observable`, `@Environment` for app-wide dependencies.
 
@@ -74,6 +74,8 @@ Prefer a single `State` enum over several loosely-related booleans (`isLoading`,
 - Every ViewModel gets unit tests with Swift Testing (`import Testing`, `@Test`, `#expect`).
 - Cover: initial state, success path, each failure mapping, and loading-state transitions.
 - Test async methods with `await`; no `sleep`s.
+- `@MainActor` ViewModels and repositories must be created and called with `await` from tests.
+- Repositories/services with real logic get their own unit tests (CRUD/mapping/error paths), using an in-memory SwiftData `ModelContainer` where SwiftData is involved.
 
 ## Review Checklist
 

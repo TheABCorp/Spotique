@@ -44,6 +44,28 @@ Do not use `@StateObject`/`@ObservedObject`/`@EnvironmentObject` — the project
 - The map is Google Maps (see `iOS/CLAUDE.md`), wrapped for SwiftUI. Keep the wrapper thin and drive it from ViewModel state (visible listings, selection).
 - Before booking confirmation, show only the approximate location; never render the exact street address.
 
+## Design Principles (Apple HIG)
+
+All new views follow Apple's Human Interface Guidelines: **Clarity** (content first; UI clarifies rather than competes), **Deference** (the interface helps people interact with content), **Depth** (layers and motion convey hierarchy). Combine with `spotique-brand-ui` for branding.
+
+## Forms & Input
+
+- Use native controls (`TextField`, `DatePicker`, `Form`/`Section`, `Toggle`, `Picker`) with system styling and spacing. Build custom controls only when native ones can't do the job.
+- **Typography**: semantic styles (`.headline`, `.body`, `.caption`), never fixed point sizes, so Dynamic Type works.
+- **Keyboards & content types**: set `keyboardType`, `textContentType`, and `textInputAutocapitalization` to fit the field — e.g. `.telephoneNumber` for phone entry, `.oneTimeCode` for the SMS verification code, `.fullStreetAddress` for address fields.
+- **Focus**: manage focus with `@FocusState` and an enum of fields; move focus logically through the form (`.submitLabel(.next)` + `onSubmit`).
+- **Real-time validation**: validate in the ViewModel and show helpful, non-intrusive feedback (e.g. a character count that turns to a warning color near the limit); disable the primary action until the form is valid.
+- **Errors**: show clear, actionable messages from ViewModel error state, with a way to recover.
+- **Loading**: keep loading non-blocking — disable the action and show a `ProgressView` overlay while a save/submit is in flight.
+- **Presentation**: standard navigation — `NavigationStack`, inline title for forms, `.cancellationAction` for Cancel and `.confirmationAction` for Save/Submit in the toolbar. Wrap main screen content in a shared base view if the app adds one (e.g. for an offline banner).
+
+## Localization
+
+- SwiftUI labels take plain string literals (implicit `LocalizedStringKey`): `Button("Save")`, `Section("Name")`, `.navigationTitle("Edit")`, `.accessibilityLabel("Save")`.
+- ViewModel and model strings (error messages, validation text, computed display strings) use explicit `String(localized:)`.
+- Fallback values (`?? "Unknown"`) that must produce a `String` use `String(localized:)`.
+- After adding or changing user-facing text, confirm every new string has an entry in `Localizable.xcstrings`, and that nothing user-facing bypasses localization.
+
 ## Animation
 
 - `withAnimation` for state-driven changes, `.animation(_:value:)` for implicit ones — always scoped to a value.
@@ -76,4 +98,6 @@ Do not use `@StateObject`/`@ObservedObject`/`@EnvironmentObject` — the project
 - [ ] Loading, empty, and error states handled
 - [ ] Accessibility labels, Dynamic Type, dark mode verified
 - [ ] Previews for each state
+- [ ] Native controls, semantic fonts, and correct keyboard/`textContentType` settings
+- [ ] New user-facing strings are localized and in `Localizable.xcstrings`
 - [ ] No exact address or host phone shown before a booking is confirmed

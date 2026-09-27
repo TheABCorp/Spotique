@@ -221,3 +221,52 @@ To use `@concurrent`:
 - Resolving data-race safety compiler errors during Xcode 26 adoption
 - Building MainActor-centric app architectures (most UI apps)
 - Performance optimization — offloading specific heavy computations to background
+
+## Spotique Safety Policies
+
+Rules for keeping concurrency escape hatches rare and documented (these apply under Swift 5 too, and become compiler-enforced under Swift 6 strict concurrency).
+
+### Sendable
+
+- Every type crossing an isolation boundary (actor, `Task`, `@MainActor`) must be `Sendable`. Prefer value types: structs and enums with `Sendable` members.
+- Response/request models from `docs/api-contract.md` and display-data structs passed to views should be `Sendable` structs.
+
+### `@unchecked Sendable` — SwiftData models only
+
+SwiftData `@Model` classes can't get compiler-checked `Sendable` conformance. If one must cross an isolation boundary, mark it `@unchecked Sendable` and document why above the type:
+
+```swift
+/// Thread-safety: @unchecked Sendable because:
+/// 1. SwiftData's @Model macro manages thread-safety at the ModelContext level
+/// 2. All access goes through @MainActor-isolated services/repositories
+/// 3. Instances are never shared across isolation domains
+@Model
+final class CachedListing: @unchecked Sendable { … }
+```
+
+Don't use `@unchecked Sendable` for anything else — use an `actor`, immutable value types, or proper isolation.
+
+### `nonisolated(unsafe)`
+
+Use only when all of these hold: the property is protected by explicit synchronization (`NSLock`, `OSAllocatedUnfairLock`), background work needs non-blocking access, and proper isolation would cause costly MainActor hops (e.g. cached network reachability state). Document the property, the lock, and why each access is safe, and always read/write it under the lock. Never access it without the lock.
+
+### Isolation Patterns
+
+- ViewModels and anything that drives UI: `@MainActor` (+ `@Observable` for ViewModels).
+- SwiftData-backed repositories: `@MainActor`, since `ModelContext` is main-actor bound.
+- Background-only shared state (retry queues, file caches): an `actor` (see `swift-actor-persistence`).
+- `Task {}` inside a `@MainActor` context inherits the actor — safe for UI updates. Use `Task.detached` or `@concurrent` for CPU-heavy work, and hop back with `await MainActor.run { … }` (or an isolated method) to update UI.
+
+### Testing with Concurrency
+
+- Create and call `@MainActor` types from tests with `await`.
+- Test helpers shared across tasks must be `Sendable`.
+
+### New-Code Checklist
+
+- [ ] Types crossing isolation boundaries are `Sendable`
+- [ ] ViewModels are `@MainActor @Observable`; SwiftData repositories are `@MainActor`
+- [ ] No `@unchecked Sendable` outside SwiftData models; no undocumented `nonisolated(unsafe)`
+- [ ] `Task` creation considers which isolation it inherits
+- [ ] Tests `await` `@MainActor` code
+- [ ] No new concurrency warnings
