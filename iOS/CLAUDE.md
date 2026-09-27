@@ -51,6 +51,14 @@ Use these skills (in [`../.claude/skills/`](../.claude/skills/)) for iOS work:
 - `liquid-glass-design` — iOS 26 Liquid Glass for navigation, toolbars, and floating map controls
 - `swift-concurrency-6-2` — Swift 6.2 concurrency patterns (`@MainActor`, `@concurrent`, isolated conformances)
 - `swift-actor-persistence` — actor-based file-backed caches (SwiftData remains the default for local persistence)
+- `mvvm-architecture` — `@Observable` ViewModels, protocol-based DI, navigation, error handling
+- `swiftui-development` — building views: composition, state, accessibility, previews
+- `ios-api-client` — networking layer, Codable models from the API contract, auth, offline behavior
+- `swift-code-review` — reviewing Swift/SwiftUI changes
+- `ios-debugging` — diagnosing crashes, concurrency, memory, and SDK issues
+- `ios-performance` — Instruments-driven profiling of launch, lists, map, and battery
+- `ios-security-review` — Keychain, ATS, auth, and the address/phone privacy model
+- `xcode-cloud` — CI/CD workflows, `ci_scripts`, secrets, TestFlight
 
 ## Shared API Contract
 
