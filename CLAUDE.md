@@ -26,6 +26,10 @@ For any frontend, design, or user-facing UI work, use the `spotique-brand-ui` sk
 
 Default to Spotique brand colors and premium hospitality aesthetic unless explicitly told otherwise.
 
+## Branching
+
+Always create a new branch when starting new work. Never do work directly on `main`.
+
 ## Commits & Pull Requests
 
 Do not add Claude or AI attribution to commits or pull requests. That means no `Co-Authored-By: Claude …` trailer, no `Claude-Session:` line, and no "Generated with Claude Code" footer or link in commit messages, PR titles, or PR descriptions.

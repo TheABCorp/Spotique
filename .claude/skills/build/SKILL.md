@@ -6,7 +6,7 @@ argument-hint: "[path-to-spec]"
 
 # Skill: Build from Tech Spec
 
-Take a completed tech spec and generate code across all platforms. This skill chains the existing platform skills (`rails-api`, `ios-feature`, `android-feature`).
+Take a completed tech spec and generate code across all platforms. This skill chains the existing platform skills (`rails-api`, `android-feature`).
 
 ## Before You Start
 
@@ -68,9 +68,9 @@ Launch two agents simultaneously using the Task tool:
 ```
 Implement <feature> in iOS/ following:
 - Tech spec: docs/specs/<feature-slug>.md (Platform UI → iOS section)
-- Skill: .claude/skills/ios-feature.md
 - API contract: docs/api-contract.md
 - Platform guide: iOS/CLAUDE.md
+- Skills: .claude/skills/swift-concurrency-6-2, .claude/skills/liquid-glass-design, .claude/skills/swift-actor-persistence, .claude/skills/spotique-brand-ui
 ```
 
 **Android agent:**

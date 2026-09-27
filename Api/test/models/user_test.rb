@@ -29,7 +29,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "valid US phone format" do
-    user = User.new(phone: "+13475551234")
+    user = User.new(phone: "+13475558888")
     assert user.valid?
   end
 
@@ -94,5 +94,25 @@ class UserTest < ActiveSupport::TestCase
     duplicate = User.new(email: existing.email)
     assert_not duplicate.valid?
     assert duplicate.errors[:email].any?
+  end
+
+  test "email uniqueness is case-insensitive" do
+    existing = users(:complete_email_user)
+    duplicate = User.new(email: existing.email.upcase)
+    assert_not duplicate.valid?
+    assert duplicate.errors[:email].any?
+  end
+
+  test "has_many addresses" do
+    user = users(:complete_phone_user)
+    assert_equal 1, user.addresses.count
+    assert_equal "34-15 74th Street", user.addresses.first.street
+  end
+
+  test "destroying user cascades to addresses" do
+    user = users(:complete_phone_user)
+    assert_difference "Address.count", -1 do
+      user.destroy
+    end
   end
 end

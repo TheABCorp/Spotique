@@ -31,7 +31,7 @@ Implement a feature across all platforms: Rails API, iOS, and Android.
 
 Run these in parallel using separate agents:
 
-**iOS** (follow `ios-feature` skill):
+**iOS** (follow `iOS/CLAUDE.md` and its listed skills: `swift-concurrency-6-2`, `liquid-glass-design`, `swift-actor-persistence`):
 1. Create model matching the API contract.
 2. Create service calling the endpoint.
 3. Create ViewModel with state management.
@@ -59,7 +59,7 @@ To run phases 3 in parallel, use the Task tool:
 
 ```
 Launch two agents simultaneously:
-- iOS agent: "Implement [feature] in iOS/ following .claude/skills/ios-feature.md and docs/api-contract.md"
+- iOS agent: "Implement [feature] in iOS/ following iOS/CLAUDE.md and docs/api-contract.md"
 - Android agent: "Implement [feature] in Android/ following .claude/skills/android-feature.md and docs/api-contract.md"
 ```
 
