@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Spotique is an iOS app built with SwiftUI and SwiftData. It targets iOS 26.1, uses Swift 5, and has bundle identifier `com.actionman.Spotique`. Minimum iOS is 26.1; use Xcode 26+.
+Spotique is an iOS app built with SwiftUI and SwiftData. It targets iOS 26.1, uses **Swift 6 language mode** (strict concurrency checking is on), and has bundle identifier `com.actionman.Spotique`. Minimum iOS is 26.1; use Xcode 26+.
 
 ## Build & Test Commands
 
@@ -73,6 +73,12 @@ Organize by feature as the app grows:
 - Consistent error handling and loading state (prefer one `State` enum over scattered booleans)
 - Computed properties for UI state derivation — keep them cheap
 - Clear separation of business logic from UI logic
+
+## Concurrency
+
+- The project builds in Swift 6 language mode with `SWIFT_APPROACHABLE_CONCURRENCY = YES` and `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor`, so types are `@MainActor` by default and data races are compile errors. Keep the build at zero concurrency warnings.
+- Types used off the main actor (API models, networking, parsers) must be explicitly `nonisolated` and `Sendable`. Use `@concurrent` for CPU-heavy work and an `actor` for shared background state.
+- Follow the `swift-concurrency-6-2` skill for the rules on `@unchecked Sendable` (SwiftData models only) and `nonisolated(unsafe)` (documented, lock-protected only).
 
 ## Key Dependencies
 

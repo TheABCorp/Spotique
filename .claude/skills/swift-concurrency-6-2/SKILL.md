@@ -18,7 +18,7 @@ Patterns for adopting Swift 6.2's concurrency model where code runs single-threa
 
 ## Spotique Context
 
-- The iOS target currently builds with **Swift 5** (see `iOS/CLAUDE.md`). Adopting Swift 6.2 semantics means enabling the Approachable Concurrency build settings (default MainActor isolation, `NonisolatedNonsendingByDefault`) in the Xcode project — do this deliberately, in its own change, not as a side effect of feature work.
+- The iOS target builds in **Swift 6 language mode** (strict concurrency is enforced, so data races are compile errors) with `SWIFT_APPROACHABLE_CONCURRENCY = YES` and `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` already set in all targets (see `iOS/CLAUDE.md`). Everything is `@MainActor` unless marked otherwise; mark models, networking, and other off-main-actor types `nonisolated` and `Sendable`. Keep the build at zero concurrency warnings.
 - Follow the project convention: `async/await` for all async work, `@Observable` ViewModels marked `@MainActor` when they drive UI state. Avoid Combine unless wrapping a delegate-based API.
 - Good `@concurrent` candidates in Spotique: decoding large listing payloads, clustering map markers, image resizing before upload. Network calls (Firestore, REST) are already async and should stay on the calling actor.
 - Mock services behind protocols in ViewModel tests (Swift Testing); keep test doubles `Sendable`.
@@ -224,7 +224,7 @@ To use `@concurrent`:
 
 ## Spotique Safety Policies
 
-Rules for keeping concurrency escape hatches rare and documented (these apply under Swift 5 too, and become compiler-enforced under Swift 6 strict concurrency).
+Rules for keeping concurrency escape hatches rare and documented (Swift 6 strict concurrency enforces most of these at compile time; the rest are review rules).
 
 ### Sendable
 
