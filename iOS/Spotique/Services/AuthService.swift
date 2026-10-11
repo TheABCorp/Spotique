@@ -16,7 +16,7 @@ nonisolated struct SendCodeResult: Codable, Sendable {
 }
 
 nonisolated struct VerifyResult: Codable, Sendable {
-    let id: String
+    let id: UUID
     let token: String
     let isNew: Bool
     let user: User?
@@ -25,7 +25,7 @@ nonisolated struct VerifyResult: Codable, Sendable {
 nonisolated struct CompleteProfileInput: Encodable, Sendable {
     let firstName: String
     let lastName: String
-    let address: String
+    let address: AddressInput
     let role: UserRole
 }
 

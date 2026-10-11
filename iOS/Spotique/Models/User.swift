@@ -1,7 +1,7 @@
 import Foundation
 
-/// Mirrors the API `users` table (Api/db/schema.rb).
-/// Name and role are nil until the user completes their profile.
+/// Mirrors the API user object (Api/app/serializers/user_serializer.rb).
+/// Name, role, and addresses are empty until the user completes their profile.
 nonisolated struct User: Codable, Sendable, Hashable, Identifiable {
     let id: UUID
     let phone: String?
@@ -9,6 +9,7 @@ nonisolated struct User: Codable, Sendable, Hashable, Identifiable {
     let firstName: String?
     let lastName: String?
     let role: UserRole?
+    let addresses: [Address]
     let createdAt: Date
     let updatedAt: Date
 

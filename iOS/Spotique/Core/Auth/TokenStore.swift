@@ -4,9 +4,12 @@ import Security
 
 // MARK: - Protocol
 
+/// Persists the session credentials: the bearer token and the signed-in
+/// user's ID, which is needed to fetch `GET /users/:id` on relaunch.
 nonisolated protocol TokenStoring: Sendable {
     func token() -> String?
-    func save(_ token: String) throws
+    func userID() -> UUID?
+    func save(token: String, userID: UUID) throws
     func clear()
 }
 
@@ -14,13 +17,40 @@ nonisolated protocol TokenStoring: Sendable {
 
 nonisolated struct KeychainTokenStore: TokenStoring, Sendable {
     private let service: String
-    private let account = "auth-token"
+    private let tokenAccount = "auth-token"
+    private let userIDAccount = "user-id"
 
     init(service: String = Bundle.main.bundleIdentifier ?? "com.actionman.Spotique") {
         self.service = service
     }
 
     func token() -> String? {
+        read(account: tokenAccount)
+    }
+
+    func userID() -> UUID? {
+        read(account: userIDAccount).flatMap(UUID.init(uuidString:))
+    }
+
+    func save(token: String, userID: UUID) throws {
+        clear()
+        do {
+            try write(token, account: tokenAccount)
+            try write(userID.uuidString, account: userIDAccount)
+        } catch {
+            clear()
+            throw error
+        }
+    }
+
+    func clear() {
+        delete(account: tokenAccount)
+        delete(account: userIDAccount)
+    }
+
+    // MARK: - Keychain Access
+
+    private func read(account: String) -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -38,10 +68,8 @@ nonisolated struct KeychainTokenStore: TokenStoring, Sendable {
         return String(data: data, encoding: .utf8)
     }
 
-    func save(_ token: String) throws {
-        guard let data = token.data(using: .utf8) else { return }
-
-        clear()
+    private func write(_ value: String, account: String) throws {
+        guard let data = value.data(using: .utf8) else { return }
 
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -58,7 +86,7 @@ nonisolated struct KeychainTokenStore: TokenStoring, Sendable {
         }
     }
 
-    func clear() {
+    private func delete(account: String) {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
