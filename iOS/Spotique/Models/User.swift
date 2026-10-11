@@ -18,6 +18,13 @@ nonisolated struct User: Codable, Sendable, Hashable, Identifiable {
         return [firstName, lastInitial].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ")
     }
 
+    /// Mirrors Rails `User#profile_complete?`. Verify returns an existing but
+    /// incomplete user (`is_new: false`) when an earlier signup was abandoned.
+    var isProfileComplete: Bool {
+        let hasName = !(firstName ?? "").isEmpty && !(lastName ?? "").isEmpty
+        return hasName && role != nil && !addresses.isEmpty
+    }
+
     var isHost: Bool {
         role == .host || role == .both
     }

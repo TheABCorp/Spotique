@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Auth Destination
 
-nonisolated enum AuthDestination: Sendable {
+nonisolated enum AuthDestination: Sendable, Equatable {
     case phone(String)
     case email(String)
 }
@@ -15,6 +15,8 @@ nonisolated struct SendCodeResult: Codable, Sendable {
     let expiresIn: Int
 }
 
+/// `POST /auth/verify` response. `id` is the verified user's ID, present even
+/// for a brand-new account, where `user` is nil.
 nonisolated struct VerifyResult: Codable, Sendable {
     let id: UUID
     let token: String
@@ -22,7 +24,7 @@ nonisolated struct VerifyResult: Codable, Sendable {
     let user: User?
 }
 
-nonisolated struct CompleteProfileInput: Encodable, Sendable {
+nonisolated struct CompleteProfileInput: Encodable, Sendable, Equatable {
     let firstName: String
     let lastName: String
     let address: AddressInput
