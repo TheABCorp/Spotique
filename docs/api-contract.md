@@ -148,9 +148,31 @@ Complete registration for a new user. **Requires authentication** — the token 
 
 **Response (201):** Returns the full user object (same shape as existing user in `POST /auth/verify`).
 
-### `PATCH /users/me`
+---
 
-Update current user's profile. Requires authentication.
+## Users
+
+Users can only read and update their own record. Requesting another user's `:id` returns 403 `"forbidden"`. Both endpoints require authentication and return 403 `"profile_incomplete"` until `POST /auth/complete-profile` has been called.
+
+### `GET /users/:id`
+
+Get the signed-in user. Clients use this to restore a session on launch, with the user ID saved from `POST /auth/verify`.
+
+**Response (200):** Returns the full user object (same shape as existing user in `POST /auth/verify`).
+
+**Error (403):** `:id` is not the signed-in user.
+```json
+{
+  "error": {
+    "code": "forbidden",
+    "message": "You can only access your own user record."
+  }
+}
+```
+
+### `PATCH /users/:id`
+
+Update the signed-in user's profile.
 
 **Request:**
 ```json
@@ -158,24 +180,29 @@ Update current user's profile. Requires authentication.
   "user": {
     "first_name": "Jane",
     "last_name": "Doe",
-    "address": "34-15 74th Street, Jackson Heights, NY 11372",
-    "role": "both",
-    "payment_method_text": "Cash or Venmo @janed"
+    "role": "both"
   }
 }
 ```
 
-All fields are optional — only include fields being updated.
+All fields are optional — only include fields being updated. Other fields (`phone`, `email`, `id`) are ignored. Addresses are not editable through this endpoint.
+
+**Validations:**
+- `first_name`, `last_name`: 1–50 characters when present; cannot be cleared (blank or `null` returns 422).
+- `role`: one of `host`, `driver`, `both`.
 
 **Response (200):** Returns the updated user object.
 
-### `DELETE /users/me`
+**Error (422):** Validation failed, with per-field `details`.
 
-Delete account. Deletes Firestore user document and anonymizes booking records (PRD §4.8).
+### `DELETE /users/:id` — planned
+
+Delete the signed-in user's account and their addresses, and anonymize their booking records (PRD §4.8). Not implemented yet; required before App Store submission (App Review Guideline 5.1.1(v)).
 
 **Response (204):** No content.
 
 ---
+
 
 ## Listings
 
