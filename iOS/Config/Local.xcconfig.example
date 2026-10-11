@@ -1,0 +1,4 @@
+// Copy to Local.xcconfig (gitignored) to override Debug settings on your machine.
+// Example: point a physical device at the Rails server on your Mac or an ngrok tunnel.
+
+API_BASE_URL = https:/$()/your-tunnel.ngrok-free.app/api/v1

@@ -1,0 +1,8 @@
+// Build settings for the Debug configuration of the Spotique app target.
+// `$()` keeps `//` from being read as a comment.
+
+// Local Rails server (`bin/rails server` in Api/). Works in the simulator;
+// on a physical device, override this in Local.xcconfig.
+API_BASE_URL = http:/$()/localhost:3000/api/v1
+
+#include? "Local.xcconfig"
