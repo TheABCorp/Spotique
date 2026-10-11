@@ -2,6 +2,7 @@ import Foundation
 
 /// Mirrors the API `users` table (Api/db/schema.rb).
 /// Name and role are nil until the user completes their profile.
+nonisolated struct User: Codable, Sendable, Hashable, Identifiable {
     let id: UUID
     let phone: String?
     let email: String?
@@ -25,7 +26,7 @@ import Foundation
     }
 }
 
-enum UserRole: String, Codable, Sendable, Hashable, CaseIterable {
+nonisolated enum UserRole: String, Codable, Sendable, Hashable, CaseIterable {
     case host
     case driver
     case both
