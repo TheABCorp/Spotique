@@ -8,6 +8,8 @@ Rails.application.routes.draw do
         post "verify", to: "verify#create"
         post "complete-profile", to: "complete_profile#create"
       end
+
+      resources :users, only: %i[show update]
     end
   end
 end

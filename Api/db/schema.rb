@@ -28,7 +28,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_26_000008) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_addresses_on_user_id"
-    t.check_constraint "label::text = ANY (ARRAY['home'::character varying, 'work'::character varying, 'other'::character varying]::text[])", name: "addresses_label_valid"
+    t.check_constraint "label::text = ANY (ARRAY['home'::character varying::text, 'work'::character varying::text, 'other'::character varying::text])", name: "addresses_label_valid"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -43,7 +43,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_26_000008) do
     t.index ["phone"], name: "index_users_on_phone", unique: true, where: "(phone IS NOT NULL)"
     t.check_constraint "phone IS NOT NULL OR email IS NOT NULL", name: "users_phone_or_email_present"
     t.check_constraint "phone::text ~ '^\\+1\\d{10}$'::text", name: "users_phone_e164_format"
-    t.check_constraint "role::text = ANY (ARRAY['host'::character varying, 'driver'::character varying, 'both'::character varying]::text[])", name: "users_role_valid"
+    t.check_constraint "role::text = ANY (ARRAY['host'::character varying::text, 'driver'::character varying::text, 'both'::character varying::text])", name: "users_role_valid"
   end
 
   create_table "verification_codes", force: :cascade do |t|
