@@ -4,10 +4,23 @@
     "$5/hr · Driveway" : {
 
     },
+    "%lld of %lld digits entered" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld digits entered"
+          }
+        }
+      }
+    },
     "(347) 555-1234" : {
 
     },
     "35th Avenue, Jackson Heights" : {
+
+    },
+    "6-digit verification code" : {
 
     },
     "Background content" : {
@@ -29,6 +42,9 @@
 
     },
     "Email" : {
+
+    },
+    "Enter your code" : {
 
     },
     "Explore" : {
@@ -76,6 +92,12 @@
     "Profile" : {
 
     },
+    "Resend code" : {
+
+    },
+    "Resend code (%llds)" : {
+
+    },
     "Retry" : {
 
     },
@@ -115,7 +137,19 @@
     "US numbers only" : {
 
     },
+    "Use a different email" : {
+
+    },
+    "Use a different phone number" : {
+
+    },
+    "Verify" : {
+
+    },
     "We received an unexpected response. Please try again." : {
+
+    },
+    "We sent a 6-digit code to %@." : {
 
     },
     "We'll email you a 6-digit code." : {

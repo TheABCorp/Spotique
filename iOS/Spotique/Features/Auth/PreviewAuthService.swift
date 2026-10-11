@@ -35,4 +35,24 @@ struct PreviewAuthService: AuthServicing {
         }
     }
 }
+
+/// Stores nothing, so previews never touch the Keychain.
+struct PreviewTokenStore: TokenStoring {
+    func token() -> String? { nil }
+    func userID() -> UUID? { nil }
+    func save(token: String, userID: UUID) throws {}
+    func clear() {}
+}
+
+struct PreviewUserService: UserServicing {
+    func user(id: UUID) async throws -> User { throw APIError.notFound }
+    func updateUser(id: UUID, _ fields: UserUpdateInput) async throws -> User { throw APIError.notFound }
+    func deleteAccount() async throws {}
+}
+
+extension SessionStore {
+    static var preview: SessionStore {
+        SessionStore(tokenStore: PreviewTokenStore(), userService: PreviewUserService())
+    }
+}
 #endif
