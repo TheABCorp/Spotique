@@ -1,0 +1,4 @@
+// Build settings for the Release configuration of the Spotique app target.
+// `$()` keeps `//` from being read as a comment.
+
+API_BASE_URL = https:/$()/api.spotique.app/api/v1

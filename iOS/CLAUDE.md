@@ -30,6 +30,15 @@ open Spotique.xcodeproj
 
 If the `iPhone 16` simulator isn't installed, substitute an available device (`xcrun simctl list devices available`).
 
+## Build Configuration
+
+Per-environment values live in `Config/Debug.xcconfig` and `Config/Release.xcconfig` (the app target's base configurations) and reach code through `Config/Info.plist`, which Xcode merges into the generated Info.plist. `APIConfiguration.current` reads `API_BASE_URL` from there and fails fast if it's missing.
+
+- Debug points at the local Rails server (`http://localhost:3000/api/v1`), which only works in the simulator.
+- To override Debug values on your machine (e.g. a physical device pointing at an ngrok tunnel), copy `Config/Local.xcconfig.example` to `Config/Local.xcconfig`. It's gitignored.
+- In `.xcconfig` files `//` starts a comment, so write URLs as `https:/$()/host`.
+- Don't put secrets here; anything in Info.plist ships readable in the app bundle.
+
 ## Architecture
 
 - **MVVM** — Views observe ViewModels (`@Observable`), ViewModels call services/repositories, models are plain structs or `@Model` classes.
