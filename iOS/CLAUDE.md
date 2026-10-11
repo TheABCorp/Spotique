@@ -13,10 +13,10 @@ Spotique is an iOS app built with SwiftUI and SwiftData. It targets iOS 26.1, us
 xcodebuild -project Spotique.xcodeproj -scheme Spotique -sdk iphonesimulator build
 
 # Run unit tests
-xcodebuild -project Spotique.xcodeproj -scheme Spotique -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 16' test
+xcodebuild -project Spotique.xcodeproj -scheme Spotique -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17' test
 
 # Run a single test
-xcodebuild -project Spotique.xcodeproj -scheme Spotique -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SpotiqueTests/SpotiqueTests/example test
+xcodebuild -project Spotique.xcodeproj -scheme Spotique -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17' -only-testing:SpotiqueTests/SpotiqueTests/example test
 
 # Clean build folder
 xcodebuild clean -project Spotique.xcodeproj -scheme Spotique
@@ -28,7 +28,7 @@ xcodebuild -project Spotique.xcodeproj -scheme Spotique -destination generic/pla
 open Spotique.xcodeproj
 ```
 
-If the `iPhone 16` simulator isn't installed, substitute an available device (`xcrun simctl list devices available`).
+If the `iPhone 17` simulator isn't installed, substitute an available device running iOS 26.1 or later (`xcrun simctl list devices available`).
 
 ## Build Configuration
 
