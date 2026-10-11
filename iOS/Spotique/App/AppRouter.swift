@@ -28,4 +28,13 @@ final class AppRouter {
         tabs.append(.profile)
         return tabs
     }
+
+    /// A host-only user has no Explore tab, so the default selection would
+    /// point at a hidden tab. Fall back to their first visible tab.
+    func selectFirstTabIfHidden(for user: User) {
+        let tabs = visibleTabs(for: user)
+        if !tabs.contains(selectedTab), let first = tabs.first {
+            selectedTab = first
+        }
+    }
 }

@@ -26,4 +26,21 @@ struct AppRouterTests {
         let tabs = router.visibleTabs(for: TestHelpers.makeUser(role: .both))
         #expect(tabs == [.explore, .bookings, .listings, .profile])
     }
+
+    @Test func hostOnlyUserFallsBackToFirstVisibleTab() {
+        let router = AppRouter()
+
+        router.selectFirstTabIfHidden(for: TestHelpers.makeUser(role: .host))
+
+        #expect(router.selectedTab == .listings)
+    }
+
+    @Test func visibleSelectionIsKept() {
+        let router = AppRouter()
+        router.selectedTab = .bookings
+
+        router.selectFirstTabIfHidden(for: TestHelpers.makeUser(role: .both))
+
+        #expect(router.selectedTab == .bookings)
+    }
 }
