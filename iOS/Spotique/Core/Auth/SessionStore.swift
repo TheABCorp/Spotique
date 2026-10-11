@@ -44,6 +44,8 @@ final class SessionStore {
             return
         }
 
+        // TODO: `currentUser()` needs the API users endpoint. Until it exists
+        // this always fails, so a relaunch with a stored token lands on `.signedOut`.
         do {
             let user = try await userService.currentUser()
             currentUser = user

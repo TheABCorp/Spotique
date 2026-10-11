@@ -20,25 +20,21 @@ struct UserUpdateInput: Encodable, Sendable {
 
 // MARK: - Live Implementation
 
+// TODO: Implement once the API has a users resource endpoint (read, update,
+// delete for the signed-in user). The API doesn't expose one yet, so these
+// throw `.notFound`, which matches what the server currently returns.
 struct LiveUserService: UserServicing {
     let apiClient: APIClient
 
     func currentUser() async throws -> User {
-        let endpoint = Endpoint(method: .get, path: "/users/me")
-        return try await apiClient.send(endpoint)
+        throw APIError.notFound
     }
 
     func update(_ fields: UserUpdateInput) async throws -> User {
-        let endpoint = Endpoint(
-            method: .patch,
-            path: "/users/me",
-            body: ["user": fields]
-        )
-        return try await apiClient.send(endpoint)
+        throw APIError.notFound
     }
 
     func deleteAccount() async throws {
-        let endpoint = Endpoint(method: .delete, path: "/users/me")
-        try await apiClient.sendEmpty(endpoint)
+        throw APIError.notFound
     }
 }
