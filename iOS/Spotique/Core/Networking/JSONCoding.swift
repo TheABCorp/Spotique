@@ -1,23 +1,20 @@
 import Foundation
 
-enum JSONCoding {
+nonisolated enum JSONCoding {
     nonisolated static let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
 
-        let isoFormatter = ISO8601DateFormatter()
-        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-
-        let isoFormatterNoFraction = ISO8601DateFormatter()
-        isoFormatterNoFraction.formatOptions = [.withInternetDateTime]
+        let isoStyle = Date.ISO8601FormatStyle(includingFractionalSeconds: true)
+        let isoStyleNoFraction = Date.ISO8601FormatStyle()
 
         decoder.dateDecodingStrategy = .custom { decoder in
             let container = try decoder.singleValueContainer()
             let string = try container.decode(String.self)
-            if let date = isoFormatter.date(from: string) {
+            if let date = try? isoStyle.parse(string) {
                 return date
             }
-            if let date = isoFormatterNoFraction.date(from: string) {
+            if let date = try? isoStyleNoFraction.parse(string) {
                 return date
             }
             throw DecodingError.dataCorruptedError(

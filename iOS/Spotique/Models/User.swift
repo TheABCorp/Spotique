@@ -2,7 +2,6 @@ import Foundation
 
 /// Mirrors the API `users` table (Api/db/schema.rb).
 /// Name and role are nil until the user completes their profile.
-struct User: Codable, Sendable, Hashable, Identifiable {
     let id: UUID
     let phone: String?
     let email: String?

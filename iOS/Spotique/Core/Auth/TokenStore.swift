@@ -1,9 +1,10 @@
 import Foundation
+import OSLog
 import Security
 
 // MARK: - Protocol
 
-protocol TokenStoring: Sendable {
+nonisolated protocol TokenStoring: Sendable {
     func token() -> String?
     func save(_ token: String) throws
     func clear()
@@ -11,7 +12,7 @@ protocol TokenStoring: Sendable {
 
 // MARK: - Keychain Implementation
 
-struct KeychainTokenStore: TokenStoring, Sendable {
+nonisolated struct KeychainTokenStore: TokenStoring, Sendable {
     private let service: String
     private let account = "auth-token"
 
@@ -69,7 +70,7 @@ struct KeychainTokenStore: TokenStoring, Sendable {
 
 // MARK: - Keychain Error
 
-enum KeychainError: Error {
+nonisolated enum KeychainError: Error {
     case saveFailed(OSStatus)
 }
 

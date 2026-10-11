@@ -2,27 +2,27 @@ import Foundation
 
 // MARK: - Auth Destination
 
-enum AuthDestination: Sendable {
+nonisolated enum AuthDestination: Sendable {
     case phone(String)
     case email(String)
 }
 
 // MARK: - Auth Responses
 
-struct SendCodeResult: Codable, Sendable {
+nonisolated struct SendCodeResult: Codable, Sendable {
     let medium: String
     let masked: String
     let expiresIn: Int
 }
 
-struct VerifyResult: Codable, Sendable {
+nonisolated struct VerifyResult: Codable, Sendable {
     let id: String
     let token: String
     let isNew: Bool
     let user: User?
 }
 
-struct CompleteProfileInput: Encodable, Sendable {
+nonisolated struct CompleteProfileInput: Encodable, Sendable {
     let firstName: String
     let lastName: String
     let address: String

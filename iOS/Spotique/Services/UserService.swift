@@ -10,7 +10,7 @@ protocol UserServicing: Sendable {
 
 // MARK: - Update Input
 
-struct UserUpdateInput: Encodable, Sendable {
+nonisolated struct UserUpdateInput: Encodable, Sendable {
     var firstName: String?
     var lastName: String?
     var address: String?

@@ -1,6 +1,6 @@
 import Foundation
 
-enum APIError: Error, Equatable, Sendable {
+nonisolated enum APIError: Error, Equatable, Sendable {
     case unauthorized(message: String?)
     case profileIncomplete
     case forbidden(code: String?)
@@ -76,7 +76,7 @@ extension APIError: LocalizedError {
 
 // MARK: - Server Error Body
 
-struct ServerErrorBody: Decodable, Sendable {
+nonisolated struct ServerErrorBody: Decodable, Sendable {
     let error: ErrorDetail
 
     struct ErrorDetail: Decodable, Sendable {

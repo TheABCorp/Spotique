@@ -1,6 +1,6 @@
 import Foundation
 
-struct APIConfiguration: Sendable {
+nonisolated struct APIConfiguration: Sendable {
     let baseURL: URL
 
     /// Reads `API_BASE_URL` from Info.plist, which is set per build
