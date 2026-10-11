@@ -4,21 +4,27 @@ module Api
       class CompleteProfileController < ApplicationController
         include Authenticatable
 
+        REQUIRED_FIELDS = %i[first_name last_name role].freeze
+
         def create
           if current_user.profile_complete?
             return render json: { error: { message: "Profile already completed" } }, status: :conflict
           end
 
           current_user.assign_attributes(profile_params)
-          missing = %i[first_name last_name address role].select { |f| current_user.send(f).blank? }
+          missing = REQUIRED_FIELDS.select { |f| current_user.send(f).blank? }
+          address = address_params
+          missing << :address if address.blank?
 
           if missing.any?
-            details = missing.each_with_object({}) { |f, h| h[f] = ["can't be blank"] }
+            details = missing.each_with_object({}) { |f, h| h[f] = [ "can't be blank" ] }
             return render json: { error: { message: "Validation failed", details: details } }, status: :unprocessable_entity
           end
 
+          current_user.addresses.build(address)
+
           if current_user.save
-            render json: { data: user_json(current_user) }, status: :created
+            render json: { data: UserSerializer.call(current_user) }, status: :created
           else
             render json: { error: { message: "Validation failed", details: current_user.errors.messages } }, status: :unprocessable_entity
           end
@@ -27,25 +33,14 @@ module Api
         private
 
         def profile_params
-          params.require(:user).permit(:first_name, :last_name, :address, :role)
+          params.require(:user).permit(:first_name, :last_name, :role)
         end
 
-        def user_json(user)
-          {
-            id: user.id,
-            phone: user.phone,
-            email: user.email,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            address: user.address,
-            role: user.role,
-            payment_method_text: user.payment_method_text,
-            rating_positive_pct: user.rating_positive_pct,
-            rating_count: user.rating_count,
-            no_show_count: user.no_show_count,
-            created_at: user.created_at.iso8601,
-            updated_at: user.updated_at.iso8601
-          }
+        def address_params
+          address = params.require(:user)[:address]
+          return unless address.respond_to?(:permit)
+
+          address.permit(:label, :street, :city, :state, :zip, :latitude, :longitude)
         end
       end
     end
