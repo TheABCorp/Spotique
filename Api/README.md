@@ -49,6 +49,17 @@ docker compose exec api bin/rails test test/models/user_test.rb
 docker compose exec api bin/rails console
 ```
 
+### Smoke-test the auth endpoints
+
+Runs send-code, verify, and complete-profile against a running server, including error cases. Codes are set to a known value through `rails runner`, so the runner must use the same database as the server.
+
+```bash
+RUNNER="docker compose exec -T api bin/rails runner" script/smoke_auth.sh
+
+# Native setup, or a server on another port
+BASE_URL=http://localhost:3001 script/smoke_auth.sh
+```
+
 ### Install new gems
 
 After editing `Gemfile`:
