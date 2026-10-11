@@ -1,0 +1,8 @@
+{
+  "data": {
+    "id": "uid_abc123",
+    "token": "eyJhbGciOiJIUzI1NiJ9.test",
+    "is_new": true,
+    "user": null
+  }
+}

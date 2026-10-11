@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "booking_conflict",
+    "message": "Time window overlaps an existing booking",
+    "details": {}
+  }
+}
