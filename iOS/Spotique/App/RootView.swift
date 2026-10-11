@@ -121,7 +121,3 @@ private struct TabPlaceholder: View {
     }
 }
 
-#Preview {
-    RootView()
-}
-
