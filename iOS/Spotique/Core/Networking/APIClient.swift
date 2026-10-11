@@ -1,14 +1,15 @@
 import Foundation
+import OSLog
 
 // MARK: - Token Provider
 
-protocol TokenProviding: Sendable {
+nonisolated protocol TokenProviding: Sendable {
     func token() -> String?
 }
 
 // MARK: - API Client
 
-final class APIClient: Sendable {
+nonisolated final class APIClient: Sendable {
     private let session: URLSession
     private let configuration: APIConfiguration
     private let tokenProvider: any TokenProviding
@@ -102,7 +103,6 @@ final class APIClient: Sendable {
         return (data, statusCode)
     }
 
-    @discardableResult
     private func handleError(statusCode: Int, data: Data, endpoint: Endpoint) async throws -> Never {
         let apiError = APIError.from(statusCode: statusCode, data: data)
         if case .unauthorized = apiError,
@@ -116,11 +116,11 @@ final class APIClient: Sendable {
 
 // MARK: - Envelope Types
 
-struct DataEnvelope<T: Decodable>: Decodable {
+nonisolated struct DataEnvelope<T: Decodable>: Decodable {
     let data: T
 }
 
-struct PagedResponse<T: Decodable & Sendable>: Decodable, Sendable {
+nonisolated struct PagedResponse<T: Decodable & Sendable>: Decodable, Sendable {
     let data: [T]
     let meta: Meta
 

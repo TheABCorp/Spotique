@@ -1,6 +1,6 @@
 import Foundation
 
-struct Endpoint: Sendable {
+nonisolated struct Endpoint: Sendable {
     let method: HTTPMethod
     let path: String
     var queryItems: [URLQueryItem]?
@@ -40,7 +40,7 @@ struct Endpoint: Sendable {
 
 // MARK: - Type-Erased Encodable
 
-private struct AnyEncodable: Encodable, @unchecked Sendable {
+nonisolated private struct AnyEncodable: Encodable, @unchecked Sendable {
     private let _encode: (Encoder) throws -> Void
 
     init(_ value: any Encodable) {
