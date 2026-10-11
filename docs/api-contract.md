@@ -82,12 +82,21 @@ Or:
       "email": null,
       "first_name": "Jane",
       "last_name": "Doe",
-      "address": "34-15 74th Street, Jackson Heights, NY 11372",
       "role": "host",
-      "rating_positive_pct": 94,
-      "rating_count": 17,
-      "no_show_count": 0,
-      "created_at": "2025-01-15T10:00:00Z"
+      "addresses": [
+        {
+          "id": "660e8400-e29b-41d4-a716-446655440001",
+          "label": "home",
+          "street": "34-15 74th Street",
+          "city": "Jackson Heights",
+          "state": "NY",
+          "zip": "11372",
+          "latitude": 40.7505,
+          "longitude": -73.8915
+        }
+      ],
+      "created_at": "2025-01-15T10:00:00Z",
+      "updated_at": "2025-01-15T10:00:00Z"
     }
   }
 }
@@ -117,7 +126,15 @@ Complete registration for a new user. **Requires authentication** — the token 
   "user": {
     "first_name": "Jane",
     "last_name": "Doe",
-    "address": "34-15 74th Street, Jackson Heights, NY 11372",
+    "address": {
+      "label": "home",
+      "street": "34-15 74th Street",
+      "city": "Jackson Heights",
+      "state": "NY",
+      "zip": "11372",
+      "latitude": 40.7505,
+      "longitude": -73.8915
+    },
     "role": "host"
   }
 }
@@ -126,7 +143,7 @@ Complete registration for a new user. **Requires authentication** — the token 
 **Validations:**
 - `first_name`: Required, 1–50 characters.
 - `last_name`: Required, 1–50 characters.
-- `address`: Required.
+- `address`: Required object. `street`, `city`, `state`, `zip` required; `label` optional, one of `home`, `work`, `other`; `latitude`/`longitude` optional.
 - `role`: Required, one of `host`, `driver`, `both`.
 
 **Response (201):** Returns the full user object (same shape as existing user in `POST /auth/verify`).

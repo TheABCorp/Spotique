@@ -9,7 +9,15 @@ class Api::V1::Auth::CompleteProfileTest < ActionDispatch::IntegrationTest
       user: {
         first_name: "Jane",
         last_name: "Doe",
-        address: "34-15 74th Street, Jackson Heights, NY 11372",
+        address: {
+          label: "home",
+          street: "34-15 74th Street",
+          city: "Jackson Heights",
+          state: "NY",
+          zip: "11372",
+          latitude: 40.7505,
+          longitude: -73.8915
+        },
         role: "host"
       }
     }
@@ -24,6 +32,24 @@ class Api::V1::Auth::CompleteProfileTest < ActionDispatch::IntegrationTest
     assert_equal "Doe", json["last_name"]
     assert_equal "host", json["role"]
     assert_equal @incomplete_user.id, json["id"]
+    assert_equal 1, json["addresses"].length
+    assert_equal "34-15 74th Street", json["addresses"].first["street"]
+    assert_equal "11372", json["addresses"].first["zip"]
+    assert_in_delta 40.7505, json["addresses"].first["latitude"]
+    assert @incomplete_user.reload.profile_complete?
+  end
+
+  test "creates an address for the user" do
+    assert_difference -> { @incomplete_user.addresses.count }, 1 do
+      post api_v1_auth_complete_profile_path, params: @valid_params, headers: @headers, as: :json
+    end
+  end
+
+  test "response matches the users table shape" do
+    post api_v1_auth_complete_profile_path, params: @valid_params, headers: @headers, as: :json
+
+    assert_equal %w[addresses created_at email first_name id last_name phone role updated_at],
+      response.parsed_body["data"].keys.sort
   end
 
   test "returns 409 if profile already complete" do
@@ -80,6 +106,25 @@ class Api::V1::Auth::CompleteProfileTest < ActionDispatch::IntegrationTest
     post api_v1_auth_complete_profile_path, params: @valid_params, headers: @headers, as: :json
 
     assert_response :unprocessable_entity
+  end
+
+  test "returns 422 when address is a freeform string" do
+    @valid_params[:user][:address] = "34-15 74th Street, Jackson Heights, NY 11372"
+    post api_v1_auth_complete_profile_path, params: @valid_params, headers: @headers, as: :json
+
+    assert_response :unprocessable_entity
+    assert response.parsed_body["error"]["details"].key?("address")
+  end
+
+  test "returns 422 and saves nothing when address street is missing" do
+    @valid_params[:user][:address].delete(:street)
+
+    assert_no_difference "Address.count" do
+      post api_v1_auth_complete_profile_path, params: @valid_params, headers: @headers, as: :json
+    end
+
+    assert_response :unprocessable_entity
+    assert_nil @incomplete_user.reload.first_name
   end
 
   test "returns 422 with invalid role" do

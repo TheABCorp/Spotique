@@ -20,7 +20,8 @@ class Api::V1::Auth::VerifyTest < ActionDispatch::IntegrationTest
   end
 
   test "verifies code and returns existing user" do
-    user = User.create!(phone: @phone, first_name: "Jane", last_name: "Doe", address: "123 Main St", role: "host")
+    user = User.create!(phone: @phone, first_name: "Jane", last_name: "Doe", role: "host")
+    user.addresses.create!(street: "34-15 74th Street", city: "Jackson Heights", state: "NY", zip: "11372")
 
     post api_v1_auth_verify_path, params: { phone: @phone, code: @code }, as: :json
 
@@ -30,6 +31,7 @@ class Api::V1::Auth::VerifyTest < ActionDispatch::IntegrationTest
     assert_not_nil json["token"]
     assert_equal user.id, json["user"]["id"]
     assert_equal "Jane", json["user"]["first_name"]
+    assert_equal "34-15 74th Street", json["user"]["addresses"].first["street"]
   end
 
   test "returns JWT that can be decoded" do

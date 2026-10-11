@@ -38,7 +38,7 @@ module Api
             data: {
               is_new: is_new,
               token: token,
-              user: is_new ? nil : user_json(user)
+              user: is_new ? nil : UserSerializer.call(user)
             }
           }
         end
@@ -54,24 +54,6 @@ module Api
           elsif email.present? && phone.blank?
             [ "email", email ]
           end
-        end
-
-        def user_json(user)
-          {
-            id: user.id,
-            phone: user.phone,
-            email: user.email,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            address: user.address,
-            role: user.role,
-            payment_method_text: user.payment_method_text,
-            rating_positive_pct: user.rating_positive_pct,
-            rating_count: user.rating_count,
-            no_show_count: user.no_show_count,
-            created_at: user.created_at.iso8601,
-            updated_at: user.updated_at.iso8601
-          }
         end
 
         def render_error(message, status)
