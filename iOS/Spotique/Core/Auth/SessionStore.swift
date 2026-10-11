@@ -39,15 +39,15 @@ final class SessionStore {
     // MARK: - Session Lifecycle
 
     func restore() async {
-        guard tokenStore.token() != nil else {
+        guard tokenStore.token() != nil, let userID = tokenStore.userID() else {
+            // A token without a user ID can't be restored; drop it.
+            tokenStore.clear()
             state = .signedOut
             return
         }
 
-        // TODO: `currentUser()` needs the API users endpoint. Until it exists
-        // this always fails, so a relaunch with a stored token lands on `.signedOut`.
         do {
-            let user = try await userService.currentUser()
+            let user = try await userService.user(id: userID)
             currentUser = user
             state = .signedIn(user)
         } catch let error as APIError {
@@ -65,13 +65,13 @@ final class SessionStore {
     }
 
     func signIn(token: String, user: User) {
-        try? tokenStore.save(token)
+        try? tokenStore.save(token: token, userID: user.id)
         currentUser = user
         state = .signedIn(user)
     }
 
-    func signInNeedingProfile(token: String) {
-        try? tokenStore.save(token)
+    func signInNeedingProfile(token: String, userID: UUID) {
+        try? tokenStore.save(token: token, userID: userID)
         state = .needsProfile
     }
 
