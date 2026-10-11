@@ -1,0 +1,10 @@
+{
+  "error": {
+    "code": "validation_failed",
+    "message": "Validation failed",
+    "details": {
+      "first_name": ["is required"],
+      "role": ["is not included in the list"]
+    }
+  }
+}
