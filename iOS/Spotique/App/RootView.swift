@@ -9,7 +9,7 @@ struct RootView: View {
         case .launching:
             LaunchView()
         case .signedOut:
-            AuthFlowPlaceholder()
+            AuthFlowView(authService: environment.authService)
         case .needsProfile:
             ProfileCompletionPlaceholder()
         case .signedIn(let user):
@@ -36,24 +36,6 @@ private struct LaunchView: View {
 }
 
 // MARK: - Placeholders (replaced by feature plans)
-
-private struct AuthFlowPlaceholder: View {
-    var body: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "car.fill")
-                .font(.system(size: 48))
-                .foregroundStyle(Color.brandNavy)
-            Text("Spotique")
-                .font(.largeTitle.bold())
-                .foregroundStyle(Color.brandNavy)
-            Text("Find parking")
-                .font(.subheadline)
-                .foregroundStyle(Color.onSurface.opacity(0.7))
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.surface.ignoresSafeArea())
-    }
-}
 
 private struct ProfileCompletionPlaceholder: View {
     var body: some View {
