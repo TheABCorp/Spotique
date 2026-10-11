@@ -1,15 +1,16 @@
+import Foundation
 @testable import Spotique
 
-final class FakeUserService: UserServicing, @unchecked Sendable {
-    var currentUserResult: Result<User, Error> = .failure(APIError.server)
+struct FakeUserService: UserServicing {
+    var userResult: Result<User, Error> = .failure(APIError.server)
     var updateResult: Result<User, Error> = .failure(APIError.server)
     var deleteAccountError: Error?
 
-    func currentUser() async throws -> User {
-        try currentUserResult.get()
+    func user(id: UUID) async throws -> User {
+        try userResult.get()
     }
 
-    func update(_ fields: UserUpdateInput) async throws -> User {
+    func updateUser(id: UUID, _ fields: UserUpdateInput) async throws -> User {
         try updateResult.get()
     }
 

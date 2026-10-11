@@ -2,87 +2,91 @@ import Foundation
 import Testing
 @testable import Spotique
 
-@Suite(.serialized)
-struct UserServiceTests {
-    private let baseURL = URL(string: "https://api.example.com/api/v1")!
+extension NetworkTests {
+    struct UserServiceTests {
+        private let userPath = "/api/v1/users/550e8400-e29b-41d4-a716-446655440001"
 
-    private func makeService() -> LiveUserService {
-        let apiClient = APIClient(
-            session: StubURLProtocol.session(),
-            configuration: APIConfiguration(baseURL: baseURL),
-            tokenProvider: InMemoryTokenStore(token: "test-token", userID: Fixtures.userID),
-            onUnauthorized: {}
-        )
-        return LiveUserService(apiClient: apiClient)
-    }
-
-    @Test func userFetchesByID() async throws {
-        StubURLProtocol.respond { _ in (200, Data(Fixtures.userResponseJSON.utf8)) }
-
-        let user = try await makeService().user(id: Fixtures.userID)
-
-        let request = try #require(StubURLProtocol.capturedRequest)
-        #expect(request.httpMethod == "GET")
-        #expect(request.url?.path == "/api/v1/users/550e8400-e29b-41d4-a716-446655440001")
-        #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
-        #expect(user.id == Fixtures.userID)
-        #expect(user.firstName == "Jane")
-        #expect(user.role == .host)
-    }
-
-    @Test func userDecodesAddresses() async throws {
-        StubURLProtocol.respond { _ in (200, Data(Fixtures.userResponseJSON.utf8)) }
-
-        let user = try await makeService().user(id: Fixtures.userID)
-
-        let address = try #require(user.addresses.first)
-        #expect(address.label == .home)
-        #expect(address.street == "34-15 74th Street")
-        #expect(address.zip == "11372")
-        #expect(address.latitude == 40.7505)
-    }
-
-    @Test func updateUserSendsOnlyProvidedFields() async throws {
-        StubURLProtocol.respond { _ in (200, Data(Fixtures.userResponseJSON.utf8)) }
-
-        _ = try await makeService().updateUser(id: Fixtures.userID, UserUpdateInput(role: .both))
-
-        let request = try #require(StubURLProtocol.capturedRequest)
-        #expect(request.httpMethod == "PATCH")
-        #expect(request.url?.path == "/api/v1/users/550e8400-e29b-41d4-a716-446655440001")
-        let body = try #require(request.httpBody)
-        let json = try #require(try JSONSerialization.jsonObject(with: body) as? [String: [String: String]])
-        #expect(json == ["user": ["role": "both"]])
-    }
-
-    @Test func updateUserEncodesNamesInSnakeCase() async throws {
-        StubURLProtocol.respond { _ in (200, Data(Fixtures.userResponseJSON.utf8)) }
-
-        _ = try await makeService().updateUser(
-            id: Fixtures.userID,
-            UserUpdateInput(firstName: "Janet", lastName: "Dough")
-        )
-
-        let body = try #require(StubURLProtocol.capturedRequest?.httpBody)
-        let json = try #require(try JSONSerialization.jsonObject(with: body) as? [String: [String: String]])
-        #expect(json == ["user": ["first_name": "Janet", "last_name": "Dough"]])
-    }
-
-    @Test func userMapsProfileIncompleteError() async {
-        let body = #"{"error":{"code":"profile_incomplete","message":"Please complete your profile."}}"#
-        StubURLProtocol.respond { _ in (403, Data(body.utf8)) }
-
-        await #expect(throws: APIError.profileIncomplete) {
-            try await makeService().user(id: Fixtures.userID)
+        private func makeService() -> LiveUserService {
+            let tokenStore = FakeTokenStore(token: "test-token", userID: TestHelpers.sampleUserID)
+            return LiveUserService(apiClient: TestHelpers.makeAPIClient(tokenStore: tokenStore))
         }
-    }
 
-    @Test func updateUserMapsValidationError() async {
-        let body = #"{"error":{"message":"Validation failed","details":{"first_name":["can't be blank"]}}}"#
-        StubURLProtocol.respond { _ in (422, Data(body.utf8)) }
+        @Test func userFetchesByID() async throws {
+            StubURLProtocol.reset()
+            StubURLProtocol.enqueue(statusCode: 200, data: TestHelpers.fixtureData("user"))
 
-        await #expect(throws: APIError.validation(message: "Validation failed", fields: ["first_name": ["can't be blank"]])) {
-            try await makeService().updateUser(id: Fixtures.userID, UserUpdateInput(firstName: ""))
+            let user = try await makeService().user(id: TestHelpers.sampleUserID)
+
+            let request = try #require(StubURLProtocol.lastRequest)
+            #expect(request.httpMethod == "GET")
+            #expect(request.url?.path == userPath)
+            #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+            #expect(user.id == TestHelpers.sampleUserID)
+            #expect(user.firstName == "Jane")
+            #expect(user.role == .host)
+        }
+
+        @Test func userDecodesAddresses() async throws {
+            StubURLProtocol.reset()
+            StubURLProtocol.enqueue(statusCode: 200, data: TestHelpers.fixtureData("user"))
+
+            let user = try await makeService().user(id: TestHelpers.sampleUserID)
+
+            let address = try #require(user.addresses.first)
+            #expect(address.label == .home)
+            #expect(address.street == "34-15 74th Street")
+            #expect(address.zip == "11372")
+            #expect(address.latitude == 40.7505)
+        }
+
+        @Test func updateUserSendsOnlyProvidedFields() async throws {
+            StubURLProtocol.reset()
+            StubURLProtocol.enqueue(statusCode: 200, data: TestHelpers.fixtureData("user"))
+
+            _ = try await makeService().updateUser(id: TestHelpers.sampleUserID, UserUpdateInput(role: .both))
+
+            let request = try #require(StubURLProtocol.lastRequest)
+            #expect(request.httpMethod == "PATCH")
+            #expect(request.url?.path == userPath)
+            let body = try #require(request.httpBody)
+            let json = try #require(try JSONSerialization.jsonObject(with: body) as? [String: [String: String]])
+            #expect(json == ["user": ["role": "both"]])
+        }
+
+        @Test func updateUserEncodesNamesInSnakeCase() async throws {
+            StubURLProtocol.reset()
+            StubURLProtocol.enqueue(statusCode: 200, data: TestHelpers.fixtureData("user"))
+
+            _ = try await makeService().updateUser(
+                id: TestHelpers.sampleUserID,
+                UserUpdateInput(firstName: "Janet", lastName: "Dough")
+            )
+
+            let body = try #require(StubURLProtocol.lastRequest?.httpBody)
+            let json = try #require(try JSONSerialization.jsonObject(with: body) as? [String: [String: String]])
+            #expect(json == ["user": ["first_name": "Janet", "last_name": "Dough"]])
+        }
+
+        @Test func userMapsProfileIncompleteError() async {
+            StubURLProtocol.reset()
+            StubURLProtocol.enqueue(statusCode: 403, json: #"{"error":{"code":"profile_incomplete","message":"Please complete your profile."}}"#)
+
+            await #expect(throws: APIError.profileIncomplete) {
+                try await makeService().user(id: TestHelpers.sampleUserID)
+            }
+        }
+
+        @Test func updateUserMapsValidationError() async {
+            StubURLProtocol.reset()
+            StubURLProtocol.enqueue(statusCode: 422, data: TestHelpers.fixtureData("error-validation"))
+
+            let expected = APIError.validation(
+                message: "Validation failed",
+                fields: ["first_name": ["is required"], "role": ["is not included in the list"]]
+            )
+            await #expect(throws: expected) {
+                try await makeService().updateUser(id: TestHelpers.sampleUserID, UserUpdateInput(firstName: ""))
+            }
         }
     }
 }
