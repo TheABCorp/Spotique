@@ -36,6 +36,7 @@ module Api
 
           render json: {
             data: {
+              id: user.id,
               is_new: is_new,
               token: token,
               user: is_new ? nil : UserSerializer.call(user)

@@ -17,6 +17,7 @@ class Api::V1::Auth::VerifyTest < ActionDispatch::IntegrationTest
     assert json["is_new"]
     assert_not_nil json["token"]
     assert_nil json["user"]
+    assert_equal User.find_by(phone: @phone).id, json["id"]
   end
 
   test "verifies code and returns existing user" do
@@ -29,6 +30,7 @@ class Api::V1::Auth::VerifyTest < ActionDispatch::IntegrationTest
     json = response.parsed_body["data"]
     assert_not json["is_new"]
     assert_not_nil json["token"]
+    assert_equal user.id, json["id"]
     assert_equal user.id, json["user"]["id"]
     assert_equal "Jane", json["user"]["first_name"]
     assert_equal "34-15 74th Street", json["user"]["addresses"].first["street"]
