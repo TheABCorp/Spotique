@@ -46,7 +46,7 @@ private struct AuthFlowPlaceholder: View {
             Text("Spotique")
                 .font(.largeTitle.bold())
                 .foregroundStyle(Color.brandNavy)
-            Text("Sign in to find parking")
+            Text("Find parking")
                 .font(.subheadline)
                 .foregroundStyle(Color.onSurface.opacity(0.7))
         }
@@ -120,3 +120,8 @@ private struct TabPlaceholder: View {
         }
     }
 }
+
+#Preview {
+    RootView()
+}
+

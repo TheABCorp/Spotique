@@ -5,3 +5,6 @@ iOS/Config/Local.xcconfig
 # Xcode per-user settings
 xcuserdata/
 
+
+# macOS Finder metadata
+.DS_Store
