@@ -44,6 +44,9 @@
     "Email" : {
 
     },
+    "Enter a 5-digit ZIP code" : {
+
+    },
     "Enter your code" : {
 
     },
@@ -60,6 +63,9 @@
 
     },
     "Loading" : {
+
+    },
+    "Must be 50 characters or fewer" : {
 
     },
     "No internet connection. Please check your network and try again." : {
@@ -123,6 +129,9 @@
 
     },
     "This conflicts with an existing booking." : {
+
+    },
+    "This field %@" : {
 
     },
     "Too many attempts. Request a new code." : {
