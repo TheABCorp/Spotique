@@ -1,15 +1,22 @@
+import Foundation
+import Synchronization
 @testable import Spotique
 
-final class FakeTokenStore: TokenStoring, @unchecked Sendable {
-    private var storedToken: String?
+final class FakeTokenStore: TokenStoring, TokenProviding {
+    private let storage: Mutex<(token: String?, userID: UUID?)>
 
-    func token() -> String? { storedToken }
+    init(token: String? = nil, userID: UUID? = nil) {
+        storage = Mutex((token, userID))
+    }
 
-    func save(_ token: String) throws {
-        storedToken = token
+    func token() -> String? { storage.withLock { $0.token } }
+    func userID() -> UUID? { storage.withLock { $0.userID } }
+
+    func save(token: String, userID: UUID) throws {
+        storage.withLock { $0 = (token, userID) }
     }
 
     func clear() {
-        storedToken = nil
+        storage.withLock { $0 = (nil, nil) }
     }
 }

@@ -5,11 +5,11 @@ import Foundation
 struct ModelDecodingTests {
     @Test func decodesUser() throws {
         let json = """
-        {"id":"uid_abc123","phone":"+13475551234","email":null,"first_name":"Jane","last_name":"Doe","address":"34-15 74th Street","role":"host","rating_positive_pct":94,"rating_count":17,"no_show_count":0,"created_at":"2025-01-15T10:00:00Z"}
+        {"id":"550e8400-e29b-41d4-a716-446655440001","phone":"+13475551234","email":null,"first_name":"Jane","last_name":"Doe","role":"host","addresses":[],"created_at":"2025-01-15T10:00:00Z","updated_at":"2025-01-15T10:00:00Z"}
         """.data(using: .utf8)!
 
         let user = try JSONCoding.decoder.decode(User.self, from: json)
-        #expect(user.id == "uid_abc123")
+        #expect(user.id == TestHelpers.sampleUserID)
         #expect(user.firstName == "Jane")
         #expect(user.role == .host)
         #expect(user.isHost == true)
@@ -17,97 +17,61 @@ struct ModelDecodingTests {
         #expect(user.displayName == "Jane D")
     }
 
-    @Test func decodesListingWithAvailabilitySchedule() throws {
+    @Test func decodesIncompleteUser() throws {
         let json = """
-        {"id":"listing_123","host_id":"uid_abc123","latitude":40.7496,"longitude":-73.8783,"spot_type":"driveway","hourly_rate_cents":500,"photos":[],"active":true,"created_at":"2025-05-01T10:00:00Z","availability_schedule":{"monday":{"enabled":true,"start":"08:00","end":"18:00"},"tuesday":{"enabled":false}}}
+        {"id":"550e8400-e29b-41d4-a716-446655440003","phone":"+13475559999","email":null,"first_name":null,"last_name":null,"role":null,"addresses":[],"created_at":"2025-01-15T10:00:00Z","updated_at":"2025-01-15T10:00:00Z"}
         """.data(using: .utf8)!
 
-        let listing = try JSONCoding.decoder.decode(Listing.self, from: json)
-        #expect(listing.id == "listing_123")
-        #expect(listing.spotType == .driveway)
-        #expect(listing.hourlyRateCents == 500)
-        #expect(listing.address == nil)
-        let monday = listing.availabilitySchedule?[.monday]
-        #expect(monday?.enabled == true)
-        #expect(monday?.start == "08:00")
-        let tuesday = listing.availabilitySchedule?[.tuesday]
-        #expect(tuesday?.enabled == false)
-        #expect(tuesday?.start == nil)
+        let user = try JSONCoding.decoder.decode(User.self, from: json)
+        #expect(user.firstName == nil)
+        #expect(user.role == nil)
+        #expect(user.isHost == false)
+        #expect(user.isDriver == false)
     }
 
-    @Test func decodesBookingPending() throws {
-        let json = """
-        {"id":"booking_456","listing_id":"listing_123","driver_id":"uid_xyz789","host_id":"uid_abc123","status":"pending","start_time":"2025-06-01T10:00:00Z","end_time":"2025-06-01T14:00:00Z","total_cents":2000,"no_show":false,"decline_reason":null,"created_at":"2025-05-28T12:00:00Z"}
-        """.data(using: .utf8)!
+    @Test func decodesUserAddresses() throws {
+        let envelope = try JSONCoding.decoder.decode(DataEnvelope<User>.self, from: TestHelpers.fixtureData("user"))
 
-        let booking = try JSONCoding.decoder.decode(Booking.self, from: json)
-        #expect(booking.id == "booking_456")
-        #expect(booking.status == .pending)
-        #expect(booking.totalCents == 2000)
-        #expect(booking.address == nil)
-        #expect(booking.hostPhone == nil)
-        #expect(booking.driverPhone == nil)
+        let address = try #require(envelope.data.addresses.first)
+        #expect(address.label == .home)
+        #expect(address.city == "Jackson Heights")
+        #expect(address.longitude == -73.8915)
     }
 
-    @Test func decodesBookingConfirmedWithHiddenFields() throws {
-        let json = """
-        {"id":"booking_456","listing_id":"listing_123","driver_id":"uid_xyz789","host_id":"uid_abc123","status":"confirmed","start_time":"2025-06-01T10:00:00Z","end_time":"2025-06-01T14:00:00Z","total_cents":2000,"no_show":false,"decline_reason":null,"created_at":"2025-05-28T12:00:00Z","address":"34-15 74th Street","host_phone":"+13475551234","driver_phone":"+17185559876","payment_method_text":"Cash or Venmo @janed"}
-        """.data(using: .utf8)!
-
-        let booking = try JSONCoding.decoder.decode(Booking.self, from: json)
-        #expect(booking.status == .confirmed)
-        #expect(booking.address == "34-15 74th Street")
-        #expect(booking.hostPhone == "+13475551234")
-        #expect(booking.driverPhone == "+17185559876")
-        #expect(booking.paymentMethodText == "Cash or Venmo @janed")
-    }
-
-    @Test func decodesRating() throws {
-        let json = """
-        {"id":"rating_1","booking_id":"booking_456","score":1,"tags":[],"note":null,"created_at":"2025-06-02T10:00:00Z"}
-        """.data(using: .utf8)!
-
-        let rating = try JSONCoding.decoder.decode(Rating.self, from: json)
-        #expect(rating.score == .up)
-        #expect(rating.tags.isEmpty)
-    }
-
-    @Test func unknownEnumValuesFallback() throws {
+    @Test func rejectsUnknownRole() {
         let roleJSON = "\"superuser\"".data(using: .utf8)!
-        let role = try JSONCoding.decoder.decode(UserRole.self, from: roleJSON)
-        #expect(role == .driver)
-
-        let statusJSON = "\"archived\"".data(using: .utf8)!
-        let status = try JSONCoding.decoder.decode(BookingStatus.self, from: statusJSON)
-        #expect(status == .unknown)
+        #expect(throws: DecodingError.self) {
+            try JSONCoding.decoder.decode(UserRole.self, from: roleJSON)
+        }
     }
 
     @Test func decodesFractionalSecondsDate() throws {
         let json = """
-        {"id":"uid_1","phone":null,"email":null,"first_name":"A","last_name":"B","role":"driver","created_at":"2025-01-15T10:00:00.123Z"}
+        {"id":"550e8400-e29b-41d4-a716-446655440001","phone":null,"email":"a@example.com","first_name":"A","last_name":"B","role":"driver","addresses":[],"created_at":"2025-01-15T10:00:00.123Z","updated_at":"2025-01-15T10:00:00Z"}
         """.data(using: .utf8)!
 
         let user = try JSONCoding.decoder.decode(User.self, from: json)
-        #expect(user.id == "uid_1")
+        #expect(abs(user.createdAt.timeIntervalSince1970 - 1_736_935_200.123) < 0.001)
     }
 
     @Test func decodesVerifyResultExisting() throws {
-        let json = """
-        {"id":"uid_abc123","token":"eyJ","is_new":false,"user":{"id":"uid_abc123","phone":"+13475551234","email":null,"first_name":"Jane","last_name":"Doe","role":"host","created_at":"2025-01-15T10:00:00Z"}}
-        """.data(using: .utf8)!
+        let envelope = try JSONCoding.decoder.decode(
+            DataEnvelope<VerifyResult>.self,
+            from: TestHelpers.fixtureData("verify-existing")
+        )
 
-        let result = try JSONCoding.decoder.decode(VerifyResult.self, from: json)
-        #expect(result.isNew == false)
-        #expect(result.user?.firstName == "Jane")
+        #expect(envelope.data.id == TestHelpers.sampleUserID)
+        #expect(envelope.data.isNew == false)
+        #expect(envelope.data.user?.firstName == "Jane")
     }
 
     @Test func decodesVerifyResultNew() throws {
-        let json = """
-        {"id":"uid_abc123","token":"eyJ","is_new":true,"user":null}
-        """.data(using: .utf8)!
+        let envelope = try JSONCoding.decoder.decode(
+            DataEnvelope<VerifyResult>.self,
+            from: TestHelpers.fixtureData("verify-new")
+        )
 
-        let result = try JSONCoding.decoder.decode(VerifyResult.self, from: json)
-        #expect(result.isNew == true)
-        #expect(result.user == nil)
+        #expect(envelope.data.isNew == true)
+        #expect(envelope.data.user == nil)
     }
 }
