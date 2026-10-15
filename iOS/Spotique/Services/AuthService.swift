@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Auth Destination
 
-nonisolated enum AuthDestination: Sendable, Equatable {
+nonisolated enum AuthDestination: Sendable, Hashable {
     case phone(String)
     case email(String)
 }

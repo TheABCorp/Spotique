@@ -4,6 +4,9 @@
     "$5/hr · Driveway" : {
 
     },
+    "(347) 555-1234" : {
+
+    },
     "35th Avenue, Jackson Heights" : {
 
     },
@@ -19,13 +22,16 @@
     "Complete Your Profile" : {
 
     },
+    "Continue" : {
+
+    },
     "Doe" : {
 
     },
-    "Explore" : {
+    "Email" : {
 
     },
-    "Find parking" : {
+    "Explore" : {
 
     },
     "Invalid code. Please try again." : {
@@ -46,6 +52,15 @@
     "No internet connection. Please try again." : {
 
     },
+    "Phone" : {
+
+    },
+    "Phone number" : {
+
+    },
+    "Phone number, US only" : {
+
+    },
     "Please check your input and try again." : {
 
     },
@@ -55,10 +70,19 @@
     "Please fix the highlighted fields." : {
 
     },
+    "Private parking in Jackson Heights, by the hour." : {
+
+    },
     "Profile" : {
 
     },
     "Retry" : {
+
+    },
+    "Sign in or create an account" : {
+
+    },
+    "Sign in with" : {
 
     },
     "Something went wrong on our end. Please try again later." : {
@@ -88,7 +112,16 @@
     "Too many requests. Please wait a moment and try again." : {
 
     },
+    "US numbers only" : {
+
+    },
     "We received an unexpected response. Please try again." : {
+
+    },
+    "We'll email you a 6-digit code." : {
+
+    },
+    "We'll text you a 6-digit code. Message and data rates may apply." : {
 
     },
     "You don't have permission to do that." : {
