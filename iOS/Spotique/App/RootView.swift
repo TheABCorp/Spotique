@@ -9,7 +9,7 @@ struct RootView: View {
         case .launching:
             LaunchView()
         case .signedOut:
-            AuthFlowView(authService: environment.authService)
+            AuthFlowView(authService: environment.authService, sessionStore: environment.sessionStore)
         case .needsProfile:
             ProfileCompletionPlaceholder()
         case .signedIn(let user):
