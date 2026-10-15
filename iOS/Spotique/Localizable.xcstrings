@@ -1,0 +1,108 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "$5/hr · Driveway" : {
+
+    },
+    "35th Avenue, Jackson Heights" : {
+
+    },
+    "Background content" : {
+
+    },
+    "Bookings" : {
+
+    },
+    "Code expired. Please request a new one." : {
+
+    },
+    "Complete Your Profile" : {
+
+    },
+    "Doe" : {
+
+    },
+    "Explore" : {
+
+    },
+    "Find parking" : {
+
+    },
+    "Invalid code. Please try again." : {
+
+    },
+    "Jane" : {
+
+    },
+    "Listings" : {
+
+    },
+    "Loading" : {
+
+    },
+    "No internet connection. Please check your network and try again." : {
+
+    },
+    "No internet connection. Please try again." : {
+
+    },
+    "Please check your input and try again." : {
+
+    },
+    "Please complete your profile to continue." : {
+
+    },
+    "Please fix the highlighted fields." : {
+
+    },
+    "Profile" : {
+
+    },
+    "Retry" : {
+
+    },
+    "Something went wrong on our end. Please try again later." : {
+
+    },
+    "Something went wrong. Please try again." : {
+
+    },
+    "Spotique" : {
+
+    },
+    "That phone number or email isn't valid. Check it and try again." : {
+
+    },
+    "The requested item could not be found." : {
+
+    },
+    "This conflicts with an existing booking." : {
+
+    },
+    "Too many attempts. Request a new code." : {
+
+    },
+    "Too many requests. Please try again later." : {
+
+    },
+    "Too many requests. Please wait a moment and try again." : {
+
+    },
+    "We received an unexpected response. Please try again." : {
+
+    },
+    "You don't have permission to do that." : {
+
+    },
+    "Your profile is already set up. Please sign in again." : {
+
+    },
+    "Your session has expired. Please sign in again." : {
+
+    },
+    "you@example.com" : {
+
+    }
+  },
+  "version" : "1.0"
+}
