@@ -11,7 +11,10 @@ struct RootView: View {
         case .signedOut:
             AuthFlowView(authService: environment.authService, sessionStore: environment.sessionStore)
         case .needsProfile:
-            ProfileCompletionPlaceholder()
+            ProfileCompletionView(viewModel: ProfileCompletionViewModel(
+                authService: environment.authService,
+                sessionStore: environment.sessionStore
+            ))
         case .signedIn(let user):
             MainTabView(user: user)
         }
@@ -35,23 +38,6 @@ private struct LaunchView: View {
     }
 }
 
-// MARK: - Placeholders (replaced by feature plans)
-
-private struct ProfileCompletionPlaceholder: View {
-    var body: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "person.crop.circle.badge.plus")
-                .font(.system(size: 48))
-                .foregroundStyle(Color.brandNavy)
-            Text("Complete Your Profile")
-                .font(.title2.bold())
-                .foregroundStyle(Color.brandNavy)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.surface.ignoresSafeArea())
-    }
-}
-
 // MARK: - Main Tab View
 
 private struct MainTabView: View {
@@ -67,6 +53,7 @@ private struct MainTabView: View {
                     .tag(tab)
             }
         }
+        .onAppear { router.selectFirstTabIfHidden(for: user) }
     }
 }
 

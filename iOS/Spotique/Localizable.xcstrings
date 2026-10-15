@@ -29,10 +29,13 @@
     "Bookings" : {
 
     },
-    "Code expired. Please request a new one." : {
+    "Both" : {
 
     },
-    "Complete Your Profile" : {
+    "City" : {
+
+    },
+    "Code expired. Please request a new one." : {
 
     },
     "Continue" : {
@@ -53,10 +56,40 @@
     "Explore" : {
 
     },
+    "Find and book private parking nearby." : {
+
+    },
+    "Finish sign-up" : {
+
+    },
+    "First name" : {
+
+    },
+    "Home address" : {
+
+    },
+    "How will you use Spotique?" : {
+
+    },
+    "I have a spot to rent" : {
+
+    },
+    "I need parking" : {
+
+    },
     "Invalid code. Please try again." : {
 
     },
     "Jane" : {
+
+    },
+    "Just a few details to finish setting up your account." : {
+
+    },
+    "Last name" : {
+
+    },
+    "List your driveway or garage by the hour." : {
 
     },
     "Listings" : {
@@ -98,6 +131,9 @@
     "Profile" : {
 
     },
+    "Rent out your spot and park elsewhere." : {
+
+    },
     "Resend code" : {
 
     },
@@ -113,6 +149,9 @@
     "Sign in with" : {
 
     },
+    "Sign out" : {
+
+    },
     "Something went wrong on our end. Please try again later." : {
 
     },
@@ -120,6 +159,15 @@
 
     },
     "Spotique" : {
+
+    },
+    "State" : {
+
+    },
+    "Street" : {
+
+    },
+    "Tell us about yourself" : {
 
     },
     "That phone number or email isn't valid. Check it and try again." : {
@@ -152,6 +200,9 @@
     "Use a different phone number" : {
 
     },
+    "Used to set up your account." : {
+
+    },
     "Verify" : {
 
     },
@@ -167,6 +218,9 @@
     "We'll text you a 6-digit code. Message and data rates may apply." : {
 
     },
+    "You can change this later in Settings." : {
+
+    },
     "You don't have permission to do that." : {
 
     },
@@ -174,6 +228,9 @@
 
     },
     "Your session has expired. Please sign in again." : {
+
+    },
+    "ZIP code" : {
 
     },
     "you@example.com" : {
